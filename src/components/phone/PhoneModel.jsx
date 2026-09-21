@@ -48,6 +48,18 @@ function GltfPhoneModel({ modelPath, rotation, scale, position }) {
       if (child.isMesh) {
         child.castShadow = true
         child.receiveShadow = true
+        // `useGLTF` cacheia MATERIAIS também, e são compartilhados por
+        // referência entre toda instância que usa o mesmo modelPath —
+        // inclusive entre "current" e "next" ao mesmo tempo na cena de
+        // scroll. Sem clonar aqui, animar `material.opacity` numa
+        // instância vazaria pra todas as outras (inclusive a de outro
+        // device, se compartilharem o mesmo asset). Clona uma vez por
+        // instância montada, não por frame.
+        if (Array.isArray(child.material)) {
+          child.material = child.material.map((material) => material.clone())
+        } else if (child.material) {
+          child.material = child.material.clone()
+        }
       }
     })
   }, [clonedScene])

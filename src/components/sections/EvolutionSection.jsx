@@ -1,60 +1,110 @@
-import { useEffect, useRef } from 'react'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { Suspense, useRef } from 'react'
+import { Canvas } from '@react-three/fiber'
+import { ContactShadows } from '@react-three/drei'
 import Timeline from '../timeline/Timeline'
 import PhoneInfo from '../phone/PhoneInfo'
-import PhoneViewer from '../phone/PhoneViewer'
+import SceneErrorBoundary from '../phone/SceneErrorBoundary'
+import SceneLighting from '../phone/SceneLighting'
+import ModelLoaderFallback from '../phone/ModelLoaderFallback'
+import ScrollControlledPhone from '../phone/ScrollControlledPhone'
+import ScrollCameraRig from '../phone/ScrollCameraRig'
+import { ScrollProgressProvider, useScrollProgress } from '../../hooks/useScrollProgress'
+import { useScrollTimeline } from '../../hooks/useScrollTimeline'
 import { useExperienceStore } from '../../store/useExperienceStore'
 import './EvolutionSection.css'
 
-gsap.registerPlugin(ScrollTrigger)
-
 /**
- * EvolutionSection: seção onde o usuário navega pelas gerações. Hoje a
- * navegação é por clique na Timeline (ver componente); a versão final vai
- * acoplar isso ao scroll com ScrollControls/ScrollTrigger, conforme o
- * roadmap do doc de arquitetura (fases 4 em diante) — por enquanto, o
- * GSAP aqui cuida só de uma revelação simples da seção ao entrar em tela.
- *
- * É quem lê o store e alimenta o <PhoneViewer> por props (modelPath) — o
- * viewer em si não sabe nada sobre "aparelho ativo" ou Zustand.
+ * EvolutionSection — wrapper fino cuja única função é abrir o
+ * <ScrollProgressProvider> (o ref compartilhado entre quem escreve o
+ * progresso do scroll e quem lê dentro de useFrame). A lógica de verdade
+ * mora em EvolutionSectionContent, que já nasce dentro do Provider e
+ * pode chamar useScrollProgress().
  */
 function EvolutionSection() {
+  return (
+    <ScrollProgressProvider>
+      <EvolutionSectionContent />
+    </ScrollProgressProvider>
+  )
+}
+
+function EvolutionSectionContent() {
   const sectionRef = useRef(null)
+  const pinRef = useRef(null)
+  const titleRef = useRef(null)
+  const panelRef = useRef(null)
+
+  const devices = useExperienceStore((state) => state.devices)
+  const activeIndex = useExperienceStore((state) => state.activeIndex)
   const activeDevice = useExperienceStore((state) => state.activeDevice)
+  const nextDevice = devices[activeIndex + 1]
 
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return undefined
+  const progressRef = useScrollProgress()
 
-    const ctx = gsap.context(() => {
-      gsap.from(el, {
-        opacity: 0,
-        y: 40,
-        duration: 0.8,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 75%',
-        },
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
+  // Monta e desmonta a timeline GSAP/ScrollTrigger em torno desta seção.
+  // Todo o "cérebro" do scroll vive nesse hook — este componente só
+  // fornece os refs de DOM que ele precisa medir/pinar.
+  useScrollTimeline({
+    sectionRef,
+    pinRef,
+    titleRef,
+    panelRef,
+    deviceCount: devices.length,
+    progressRef,
+  })
 
   return (
     <section ref={sectionRef} className="evolution-section" id="evolucao">
-      <h2 className="evolution-section__title">A evolução</h2>
-      <p className="evolution-section__lead">
-        Escolha uma geração na linha do tempo para explorar o modelo 3D e os
-        destaques daquele ano.
-      </p>
-      <div className="evolution-section__grid">
-        <div className="evolution-section__viewer">
-          <PhoneViewer modelPath={activeDevice.modelPath} />
+      <div ref={pinRef} className="evolution-section__pin">
+        {/* Título de abertura: visível no início da seção, some conforme
+            o usuário rola (tween controlado pela própria timeline, ver
+            src/animations/scrollTimeline.js). pointer-events none pra
+            nunca bloquear clique na Timeline/painel por baixo. */}
+        <div ref={titleRef} className="evolution-section__intro">
+          <h2>A evolução</h2>
+          <p>Role para acompanhar cada geração, do 3G ao modelo mais recente.</p>
         </div>
-        <div className="evolution-section__panel">
+
+        <div className="evolution-section__viewer">
+          <Canvas
+            shadows
+            dpr={[1, 2]}
+            camera={{ position: [1.6, 1, 3.2], fov: 32 }}
+            gl={{ antialias: true }}
+          >
+            <SceneLighting />
+
+            <SceneErrorBoundary>
+              <Suspense fallback={<ModelLoaderFallback />}>
+                {/* Dois aparelhos montados ao mesmo tempo: o "current"
+                    desaparece e o "next" aparece conforme o usuário rola
+                    dentro do segmento atual (ver ScrollControlledPhone).
+                    Sem `nextDevice` (último aparelho da linha), só o
+                    atual é renderizado. */}
+                <ScrollControlledPhone
+                  key={`current-${activeDevice.id}`}
+                  role="current"
+                  modelPath={activeDevice.modelPath}
+                  progressRef={progressRef}
+                />
+                {nextDevice && (
+                  <ScrollControlledPhone
+                    key={`next-${nextDevice.id}`}
+                    role="next"
+                    modelPath={nextDevice.modelPath}
+                    progressRef={progressRef}
+                  />
+                )}
+              </Suspense>
+            </SceneErrorBoundary>
+
+            <ScrollCameraRig progressRef={progressRef} />
+
+            <ContactShadows position={[0, -1.05, 0]} opacity={0.45} blur={2.6} scale={8} far={2} />
+          </Canvas>
+        </div>
+
+        <div ref={panelRef} className="evolution-section__panel">
           <Timeline />
           <PhoneInfo />
         </div>

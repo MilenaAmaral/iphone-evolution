@@ -1,51 +1,85 @@
 .evolution-section {
   position: relative;
   z-index: 1;
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 24px;
-  padding: 96px clamp(20px, 5vw, 64px);
 }
 
-.evolution-section__title {
+/* Elemento pinado pelo ScrollTrigger (fica fixo na viewport enquanto a
+   seção "rola por baixo" dele) — por isso precisa da própria altura de
+   viewport e de um layout completo, diferente do antigo .evolution-section
+   que só era um bloco de fluxo normal. */
+.evolution-section__pin {
+  position: relative;
+  height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 48px);
+  padding: 0 clamp(20px, 5vw, 64px);
+  overflow: hidden;
+}
+
+/* Título de abertura: sobreposto ao viewer, centralizado, com fade em
+   gradiente pra continuar legível por cima do aparelho 3D. Some via GSAP
+   (tween da própria timeline de scroll) conforme o usuário rola.
+   pointer-events: none garante que nunca intercepta clique no que está
+   atrás (o próprio Canvas / painel). */
+.evolution-section__intro {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+  padding: 0 clamp(20px, 6vw, 96px);
+  pointer-events: none;
+  background: radial-gradient(
+    circle at center,
+    rgba(11, 11, 13, 0.55) 0%,
+    rgba(11, 11, 13, 0.15) 55%,
+    transparent 75%
+  );
+}
+
+.evolution-section__intro h2 {
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   color: var(--color-text-strong);
   margin: 0;
 }
 
-.evolution-section__lead {
-  max-width: 34rem;
+.evolution-section__intro p {
+  max-width: 30rem;
   color: var(--color-text-muted);
   margin: 0;
 }
 
-.evolution-section__grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-  gap: clamp(24px, 4vw, 48px);
-  align-items: center;
-}
-
 .evolution-section__viewer {
+  position: relative;
   aspect-ratio: 4 / 5;
-  max-height: 70vh;
+  max-height: 78vh;
 }
 
 .evolution-section__panel {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   gap: 24px;
 }
 
 @media (max-width: 900px) {
-  .evolution-section__grid {
+  .evolution-section__pin {
     grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: auto;
+    min-height: 100svh;
+    padding-block: 96px 32px;
   }
 
   .evolution-section__viewer {
     aspect-ratio: 4 / 3;
-    max-height: 50vh;
+    max-height: 46vh;
   }
 }
