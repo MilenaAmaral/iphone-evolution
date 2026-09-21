@@ -20,7 +20,8 @@ function SpecsSection() {
 
   return (
     <section className="specs-section" id="specs">
-      <h2 className="specs-section__title">Ficha técnica — {device.name}</h2>
+      <p className="section-kicker">Apêndice — Ficha técnica completa</p>
+      <h2 className="specs-section__title">{device.name}</h2>
       <dl className="specs-section__grid">
         {SPEC_ROWS.map((row) => (
           <div className="specs-section__row" key={row.key}>

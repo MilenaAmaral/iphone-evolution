@@ -25,11 +25,10 @@ function Hero() {
   return (
     <section className="hero" id="topo">
       <h1 ref={titleRef} className="hero__title">
-        iPhone Evolution
+        Uma evolução em 3D.
       </h1>
       <p ref={subtitleRef} className="hero__subtitle">
-        Uma jornada visual e original pela evolução de design do iPhone,
-        geração a geração.
+        Explore a transformação do iPhone através das gerações.
       </p>
       <span ref={hintRef} className="hero__scroll-hint" aria-hidden="true">
         role para explorar ↓

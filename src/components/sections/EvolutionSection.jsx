@@ -11,6 +11,7 @@ import ScrollCameraRig from '../phone/ScrollCameraRig'
 import { ScrollProgressProvider, useScrollProgress, useNavigateRef } from '../../hooks/useScrollProgress'
 import { useScrollTimeline } from '../../hooks/useScrollTimeline'
 import { useModelWindow } from '../../hooks/useModelWindow'
+import { useInView } from '../../hooks/useInView'
 import { useExperienceStore } from '../../store/useExperienceStore'
 import './EvolutionSection.css'
 
@@ -85,6 +86,16 @@ function EvolutionSectionContent() {
   const progressRef = useScrollProgress()
   const navigateRef = useNavigateRef()
 
+  // Com a experiência ficando bem mais longa (8 capítulos de storytelling
+  // abaixo desta seção), o <Canvas> daqui NÃO pode continuar rodando
+  // useFrame pra sempre depois que o usuário já rolou pra longe — sem
+  // isso, cada capítulo seguinte concorreria por CPU/GPU com uma cena 3D
+  // que ninguém mais está vendo. `frameloop="never"` (ver abaixo) pausa o
+  // loop de render do R3F sem desmontar nada — o scroll pinado/timeline
+  // continuam vivos, só o desenho de frames pausa até a seção voltar a
+  // ficar perto da viewport.
+  const sectionInView = useInView(sectionRef)
+
   // Mantém os modelos GLB perto da geração ativa pré-carregados (prontos
   // antes de precisarem aparecer) e libera os que ficaram longe — ver
   // src/hooks/useModelWindow.js.
@@ -123,6 +134,7 @@ function EvolutionSectionContent() {
             dpr={[1, 2]}
             camera={{ position: [1.6, 1, 3.2], fov: 32 }}
             gl={{ antialias: true }}
+            frameloop={sectionInView ? 'always' : 'never'}
           >
             <SceneLighting />
 

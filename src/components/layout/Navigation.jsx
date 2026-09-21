@@ -4,7 +4,10 @@ import './Navigation.css'
 // seções principais. Componente puro de DOM, sem estado próprio.
 const LINKS = [
   { href: '#topo', label: 'Início' },
+  { href: '#origem', label: 'Origem' },
   { href: '#evolucao', label: 'Evolução' },
+  { href: '#design', label: 'Design' },
+  { href: '#atualidade', label: 'Atual' },
   { href: '#specs', label: 'Ficha técnica' },
 ]
 

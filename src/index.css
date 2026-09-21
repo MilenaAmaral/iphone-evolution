@@ -17,6 +17,16 @@
   --color-accent-bg: rgba(216, 178, 107, 0.12);
 
   --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  /* Serifa do sistema (sem depender de CDN externo — mesma política do
+     restante do projeto) só pra criar contraste com o --font-sans nos
+     títulos das seções de storytelling: reforça hierarquia sem repetir a
+     tipografia neutra da Apple. */
+  --font-display: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+
+  /* Ritmo vertical das seções de storytelling: bastante espaço negativo
+     entre um "capítulo" e outro, propositalmente maior que o espaçamento
+     interno de um card ou lista. */
+  --space-section: clamp(96px, 16vw, 200px);
 
   color-scheme: dark;
 }
@@ -60,4 +70,50 @@ button {
 
 a {
   color: inherit;
+}
+
+/**
+ * Utilitários tipográficos compartilhados pelas seções de storytelling
+ * (ORIGEM, GRANDES MUDANÇAS, CÂMERAS, PERFORMANCE, DESIGN, ATUALIDADE).
+ * Ficam aqui — em vez de duplicados em cada *.css — porque as seis seções
+ * compartilham a MESMA hierarquia visual (selo pequeno → título grande em
+ * serifa de destaque → parágrafo de apoio), reforçando a identidade
+ * própria do projeto em vez de repetir o padrão "specs" das seções mais
+ * antigas.
+ */
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.section-kicker::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--color-accent);
+}
+
+.section-heading {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+  color: var(--color-text-strong);
+  font-size: clamp(2.25rem, 6vw, 4rem);
+}
+
+.section-lede {
+  margin: 20px 0 0;
+  max-width: 38rem;
+  color: var(--color-text-muted);
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  line-height: 1.65;
 }
