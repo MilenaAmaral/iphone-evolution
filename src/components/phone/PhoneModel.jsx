@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useGLTF, useAnimations, RoundedBox } from '@react-three/drei'
 import { SkeletonUtils } from 'three-stdlib'
+import { USE_DRACO } from '../../three/gltfCache'
 
 /**
  * PhoneModel — carrega e exibe o modelo 3D de UM aparelho.
@@ -29,7 +30,11 @@ function PhoneModel({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0,
 
 function GltfPhoneModel({ modelPath, rotation, scale, position }) {
   const groupRef = useRef(null)
-  const { scene, animations } = useGLTF(modelPath)
+  // `USE_DRACO` vem de gltfCache.js — mesma flag usada em
+  // `preloadModel`/`releaseModel`, pra carregar e pré-carregar sempre com
+  // a mesma configuração de loader (ver o comentário lá sobre por que
+  // Draco fica desligado por padrão).
+  const { scene, animations } = useGLTF(modelPath, USE_DRACO)
 
   // `useGLTF` cacheia por URL e devolve A MESMA instância de `scene` para
   // qualquer componente que peça o mesmo `modelPath` — inclusive duas
@@ -82,9 +87,13 @@ function GltfPhoneModel({ modelPath, rotation, scale, position }) {
       rotation={rotation}
       scale={scale}
       position={position}
-      // Evita que o R3F chame dispose() nos objetos ao desmontar — como a
-      // geometria/material são compartilhados com o cache do useGLTF,
-      // descartá-los aqui quebraria o reaproveitamento do modelo depois.
+      // Evita que o R3F chame dispose() nos objetos ao desmontar — a
+      // GEOMETRIA (diferente do material, clonado acima) continua
+      // compartilhada por referência com o cache do useGLTF; descartá-la
+      // aqui quebraria qualquer outra instância montada (ou futura) do
+      // mesmo modelo. A liberação de recursos de verdade é feita de
+      // propósito, no nível do CACHE — não no unmount de uma instância —
+      // por `releaseModel` (ver src/three/gltfCache.js e useModelWindow).
       dispose={null}
     >
       <primitive object={clonedScene} />

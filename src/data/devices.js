@@ -15,7 +15,20 @@
  * - `modelPath`: caminho do modelo 3D otimizado (.glb). Fica `null` em
  *   todos os itens porque nenhum modelo 3D real foi produzido ainda — isso
  *   é trabalho da Fase 0 do pipeline de assets (ver doc de arquitetura).
- *   Enquanto for `null`, `PhoneModel` renderiza um placeholder geométrico.
+ *   Enquanto for `null`, `PhoneModel` renderiza um placeholder geométrico
+ *   (nunca uma imagem 2D). Convenção de nome de arquivo prevista pra
+ *   quando os .glb de verdade existirem: um arquivo por geração, nomeado
+ *   pelo `id` do aparelho — `/models/<id>.glb` (ex.: `/models/iphone-3g.glb`,
+ *   `/models/iphone-18-pro.glb`). A função `getModelPath(id)` abaixo monta
+ *   esse caminho; ligar um modelo real é só trocar `modelPath: null` por
+ *   `modelPath: getModelPath('iphone-3g')` no item correspondente — nenhum
+ *   componente precisa mudar (PhoneModel/gltfCache só leem essa string).
+ * - `modelScale`: fator de escala aplicado por cima da animação de
+ *   transição (ver ScrollControlledPhone), pra normalizar aparelhos cujo
+ *   .glb exportado venha em proporções diferentes entre si (unidades de
+ *   modelagem diferentes, aparelhos fisicamente maiores/menores etc.).
+ *   `1` é neutro; ajustar por geração assim que o modelo real existir e
+ *   puder ser comparado visualmente aos vizinhos.
  * - Modelos "Plus/Pro/Max/Mini" foram deixados de fora para manter uma
  *   linha do tempo de uma geração por ano. A exceção é o ciclo 2026: a
  *   Apple não lançou uma variante "padrão" do iPhone 18 (ver highlight do
@@ -51,6 +64,7 @@ export const devices = [
       'Lançado junto com a App Store (iPhone OS 2.0)',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-3gs',
@@ -69,6 +83,7 @@ export const devices = [
       'Introduziu bússola digital e o Controle por Voz',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-4',
@@ -87,6 +102,7 @@ export const devices = [
       'Primeiro com câmera frontal (FaceTime) e giroscópio',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-4s',
@@ -105,6 +121,7 @@ export const devices = [
       'Último iPhone com conector dock de 30 pinos',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-5',
@@ -123,6 +140,7 @@ export const devices = [
       'Primeiro iPhone com LTE e nano-SIM',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-5s',
@@ -141,6 +159,7 @@ export const devices = [
       'Primeiro processador de 64 bits do mercado mobile',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-6',
@@ -159,6 +178,7 @@ export const devices = [
       'Adicionou barômetro',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-6s',
@@ -177,6 +197,7 @@ export const devices = [
       'Introduziu o 3D Touch',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-7',
@@ -195,6 +216,7 @@ export const devices = [
       'Removeu a entrada de fone de ouvido de 3,5 mm',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-8',
@@ -212,6 +234,7 @@ export const devices = [
       'Traseira de vidro viabilizou carregamento sem fio (Qi) pela primeira vez na linha padrão',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-x',
@@ -230,6 +253,7 @@ export const devices = [
       'Primeira tela OLED usada em um iPhone',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-11',
@@ -248,6 +272,7 @@ export const devices = [
       'Primeira câmera ultra grande angular dupla na linha padrão',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-12',
@@ -266,6 +291,7 @@ export const devices = [
       'Introduziu o sistema magnético MagSafe',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-13',
@@ -284,6 +310,7 @@ export const devices = [
       'Estabilização de imagem por deslocamento de sensor chegou ao modelo padrão',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-14',
@@ -302,6 +329,7 @@ export const devices = [
       'Introduziu SOS via satélite e detecção de colisão',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-15',
@@ -320,6 +348,7 @@ export const devices = [
       'A Dynamic Island chegou ao modelo padrão',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-16',
@@ -337,6 +366,7 @@ export const devices = [
       'Primeiro iPhone padrão com o botão Action e o novo botão Camera Control',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-17',
@@ -355,6 +385,7 @@ export const devices = [
       'Armazenamento inicial passou de 128GB para 256GB',
     ],
     modelPath: null,
+    modelScale: 1,
   },
   {
     id: 'iphone-18-pro',
@@ -373,7 +404,12 @@ export const devices = [
       'Primeira câmera principal da linha com abertura variável',
     ],
     modelPath: null,
+    modelScale: 1,
   },
 ]
 
 export const getDeviceById = (id) => devices.find((device) => device.id === id)
+
+// Convenção de caminho pros .glb reais — ver nota sobre `modelPath` no
+// comentário do topo do arquivo.
+export const getModelPath = (id) => `/models/${id}.glb`
