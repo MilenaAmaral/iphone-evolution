@@ -60,9 +60,18 @@ function ScrollControlledPhone({ modelPath, role, progressRef, baseRotationSpeed
     group.scale.setScalar(scale)
     group.position.x = offsetX
     group.position.y = Math.sin(state.clock.elapsedTime * 0.6) * 0.04
-    // Rotação contínua (vida própria, lenta) + avanço proporcional ao
-    // progresso total do scroll — dá a sensação de "girar conforme rola".
-    group.rotation.y = state.clock.elapsedTime * baseRotationSpeed + progress * Math.PI * 2
+    // Rotação = duas camadas somadas. (1) idle contínuo e lento — vida
+    // própria do aparelho parado, sempre ligado. (2) um "giro de troca"
+    // extra que só existe enquanto `t` está entre 0 e 1 (ou seja, só
+    // durante a transição): o aparelho que sai continua a mesma rotação
+    // que já tinha e ainda gira mais ~35° na saída; o que entra chega já
+    // girado ~35° na direção oposta e volta a 0° assim que termina de
+    // entrar. É essa camada extra que faz a troca de modelo parecer um
+    // giro deliberado, não só um fade acontecendo por cima de um objeto
+    // que também, por acaso, gira sozinho.
+    const idleSpin = state.clock.elapsedTime * baseRotationSpeed + progress * Math.PI * 2
+    const swapSpin = direction * t * (Math.PI / 5)
+    group.rotation.y = idleSpin + swapSpin
     group.visible = opacity > 0.01
 
     for (const material of materialsRef.current) {

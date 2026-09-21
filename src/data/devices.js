@@ -23,11 +23,20 @@
  * - Câmeras do iPhone 3G e 3GS: a Apple nunca divulgou a abertura (ƒ) dessas
  *   lentes publicamente — por isso o campo `camera` desses dois itens diz
  *   isso de forma explícita, em vez de inventar um número.
+ * - `timelineHighlight`: `true` para o subconjunto de gerações "principais"
+ *   exibidas como marcador clicável na navegação da Timeline (uma por ano/
+ *   nome redondo — 3G, 4, 5, 6, 7, 8, X, 11...18 Pro). As variantes "S"
+ *   (3GS, 4S, 5S, 6S) ficam com `false`: continuam no dataset (specs,
+ *   scroll da EvolutionSection) só não viram botão na trilha de navegação,
+ *   pra manter a UI legível. Esse é o ÚNICO lugar que precisa ser tocado
+ *   pra adicionar/remover um aparelho de qualquer parte da experiência —
+ *   Timeline, PhoneInfo, SpecsSection e a cena 3D só leem este array.
  */
 
 export const devices = [
   {
     id: 'iphone-3g',
+    timelineHighlight: true,
     name: 'iPhone 3G',
     generation: 1,
     year: 2008,
@@ -45,6 +54,7 @@ export const devices = [
   },
   {
     id: 'iphone-3gs',
+    timelineHighlight: false,
     name: 'iPhone 3GS',
     generation: 2,
     year: 2009,
@@ -62,6 +72,7 @@ export const devices = [
   },
   {
     id: 'iphone-4',
+    timelineHighlight: true,
     name: 'iPhone 4',
     generation: 3,
     year: 2010,
@@ -79,6 +90,7 @@ export const devices = [
   },
   {
     id: 'iphone-4s',
+    timelineHighlight: false,
     name: 'iPhone 4S',
     generation: 4,
     year: 2011,
@@ -96,6 +108,7 @@ export const devices = [
   },
   {
     id: 'iphone-5',
+    timelineHighlight: true,
     name: 'iPhone 5',
     generation: 5,
     year: 2012,
@@ -113,6 +126,7 @@ export const devices = [
   },
   {
     id: 'iphone-5s',
+    timelineHighlight: false,
     name: 'iPhone 5S',
     generation: 6,
     year: 2013,
@@ -130,6 +144,7 @@ export const devices = [
   },
   {
     id: 'iphone-6',
+    timelineHighlight: true,
     name: 'iPhone 6',
     generation: 7,
     year: 2014,
@@ -147,6 +162,7 @@ export const devices = [
   },
   {
     id: 'iphone-6s',
+    timelineHighlight: false,
     name: 'iPhone 6S',
     generation: 8,
     year: 2015,
@@ -164,6 +180,7 @@ export const devices = [
   },
   {
     id: 'iphone-7',
+    timelineHighlight: true,
     name: 'iPhone 7',
     generation: 9,
     year: 2016,
@@ -181,6 +198,7 @@ export const devices = [
   },
   {
     id: 'iphone-8',
+    timelineHighlight: true,
     name: 'iPhone 8',
     generation: 10,
     year: 2017,
@@ -197,6 +215,7 @@ export const devices = [
   },
   {
     id: 'iphone-x',
+    timelineHighlight: true,
     name: 'iPhone X',
     generation: 11,
     year: 2017,
@@ -214,6 +233,7 @@ export const devices = [
   },
   {
     id: 'iphone-11',
+    timelineHighlight: true,
     name: 'iPhone 11',
     generation: 12,
     year: 2019,
@@ -231,6 +251,7 @@ export const devices = [
   },
   {
     id: 'iphone-12',
+    timelineHighlight: true,
     name: 'iPhone 12',
     generation: 13,
     year: 2020,
@@ -248,6 +269,7 @@ export const devices = [
   },
   {
     id: 'iphone-13',
+    timelineHighlight: true,
     name: 'iPhone 13',
     generation: 14,
     year: 2021,
@@ -265,6 +287,7 @@ export const devices = [
   },
   {
     id: 'iphone-14',
+    timelineHighlight: true,
     name: 'iPhone 14',
     generation: 15,
     year: 2022,
@@ -282,6 +305,7 @@ export const devices = [
   },
   {
     id: 'iphone-15',
+    timelineHighlight: true,
     name: 'iPhone 15',
     generation: 16,
     year: 2023,
@@ -299,6 +323,7 @@ export const devices = [
   },
   {
     id: 'iphone-16',
+    timelineHighlight: true,
     name: 'iPhone 16',
     generation: 17,
     year: 2024,
@@ -315,6 +340,7 @@ export const devices = [
   },
   {
     id: 'iphone-17',
+    timelineHighlight: true,
     name: 'iPhone 17',
     generation: 18,
     year: 2025,
@@ -332,6 +358,7 @@ export const devices = [
   },
   {
     id: 'iphone-18-pro',
+    timelineHighlight: true,
     name: 'iPhone 18 Pro',
     generation: 19,
     year: 2026,

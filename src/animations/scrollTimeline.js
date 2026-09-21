@@ -1,7 +1,8 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 
-gsap.registerPlugin(ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
 /**
  * createScrollTimeline — função pura (não é hook, não é componente) que
@@ -81,9 +82,43 @@ export function createScrollTimeline({ section, pin, title, panel, segments, onU
   // transform), devolvendo os elementos ao estado definido só pelo CSS —
   // sem isso, uma remontagem (StrictMode, HMR) herdaria um estilo residual
   // da instância anterior, como aconteceu ao depurar essa timeline.
-  return function cleanup() {
+  function cleanup() {
     scrollTrigger?.kill()
     timeline.kill()
     gsap.set([title, panel], { clearProps: 'opacity,transform' })
   }
+
+  // Devolve o próprio ScrollTrigger (não só o cleanup): quem chama isso
+  // (useScrollTimeline) precisa dele pra converter "índice do aparelho" em
+  // posição de scroll na função scrollToSegment abaixo — sem duplicar aqui
+  // o cálculo de start/end da seção pinada.
+  return { cleanup, scrollTrigger }
+}
+
+/**
+ * scrollToSegment — navega suavemente (sem "pulo brusco") até o ponto do
+ * scroll pinado que corresponde a um aparelho específico, usada pela
+ * navegação por clique da Timeline (ver useScrollTimeline/Timeline.jsx).
+ *
+ * Não recalcula nada: lê `start`/`end` do próprio ScrollTrigger ativo (já
+ * resolvidos em pixels) e navega para a fração exata `index / segments`
+ * dentro desse intervalo — exatamente a mesma matemática que o
+ * `onUpdate` usa pra decidir qual aparelho é o "ativo" durante o scroll
+ * natural, então clicar num item da Timeline e rolar manualmente chegam
+ * ao mesmo lugar.
+ */
+export function scrollToSegment({ scrollTrigger, segments, index, onComplete }) {
+  if (!scrollTrigger) return
+
+  const safeSegments = Math.max(1, segments)
+  const clampedIndex = Math.max(0, Math.min(index, safeSegments))
+  const targetProgress = clampedIndex / safeSegments
+  const targetY = scrollTrigger.start + targetProgress * (scrollTrigger.end - scrollTrigger.start)
+
+  gsap.to(window, {
+    duration: 1,
+    ease: 'power2.inOut',
+    scrollTo: { y: targetY, autoKill: true },
+    onComplete,
+  })
 }

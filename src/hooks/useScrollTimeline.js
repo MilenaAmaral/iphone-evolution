@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from 'react'
-import { createScrollTimeline } from '../animations/scrollTimeline'
+import { createScrollTimeline, scrollToSegment } from '../animations/scrollTimeline'
 import { useExperienceStore } from '../store/useExperienceStore'
 
 /**
@@ -22,8 +22,19 @@ import { useExperienceStore } from '../store/useExperienceStore'
  * `useLayoutEffect` (em vez de `useEffect`) porque o ScrollTrigger precisa
  * medir posições no DOM (offsetTop, alturas) antes do navegador pintar o
  * próximo frame — medir depois causaria um "pulo" visível no pin.
+ *
+ * Também é quem PREENCHE `navigateRef.current` (ver useScrollProgress.jsx)
+ * com uma função `(index) => void`: clicar num item da Timeline não pula
+ * direto pro aparelho (isso seria a "mudança brusca" que o spec pede pra
+ * evitar) — em vez disso, rola a página suavemente até o ponto exato do
+ * scroll pinado onde aquele aparelho fica ativo. Como é a MESMA rolagem
+ * que o `handleUpdate` abaixo já observa, toda a transição 3D (fade/
+ * escala/rotação em ScrollControlledPhone, câmera em ScrollCameraRig) e a
+ * atualização do estado ativo acontecem de graça, sem duplicar nenhuma
+ * lógica de transição — só estamos "dirigindo" o mesmo scroll de forma
+ * programática em vez de com a roda do mouse.
  */
-export function useScrollTimeline({ sectionRef, pinRef, titleRef, panelRef, deviceCount, progressRef }) {
+export function useScrollTimeline({ sectionRef, pinRef, titleRef, panelRef, deviceCount, progressRef, navigateRef }) {
   const lastIndexRef = useRef(0)
 
   useLayoutEffect(() => {
@@ -56,7 +67,7 @@ export function useScrollTimeline({ sectionRef, pinRef, titleRef, panelRef, devi
       }
     }
 
-    const cleanup = createScrollTimeline({
+    const { cleanup, scrollTrigger } = createScrollTimeline({
       section,
       pin,
       title,
@@ -65,6 +76,13 @@ export function useScrollTimeline({ sectionRef, pinRef, titleRef, panelRef, devi
       onUpdate: handleUpdate,
     })
 
-    return cleanup
-  }, [sectionRef, pinRef, titleRef, panelRef, deviceCount, progressRef])
+    navigateRef.current = function navigateToIndex(index) {
+      scrollToSegment({ scrollTrigger, segments, index })
+    }
+
+    return function fullCleanup() {
+      navigateRef.current = null
+      cleanup()
+    }
+  }, [sectionRef, pinRef, titleRef, panelRef, deviceCount, progressRef, navigateRef])
 }

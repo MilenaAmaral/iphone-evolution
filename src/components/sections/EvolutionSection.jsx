@@ -8,7 +8,7 @@ import SceneLighting from '../phone/SceneLighting'
 import ModelLoaderFallback from '../phone/ModelLoaderFallback'
 import ScrollControlledPhone from '../phone/ScrollControlledPhone'
 import ScrollCameraRig from '../phone/ScrollCameraRig'
-import { ScrollProgressProvider, useScrollProgress } from '../../hooks/useScrollProgress'
+import { ScrollProgressProvider, useScrollProgress, useNavigateRef } from '../../hooks/useScrollProgress'
 import { useScrollTimeline } from '../../hooks/useScrollTimeline'
 import { useExperienceStore } from '../../store/useExperienceStore'
 import './EvolutionSection.css'
@@ -40,10 +40,13 @@ function EvolutionSectionContent() {
   const nextDevice = devices[activeIndex + 1]
 
   const progressRef = useScrollProgress()
+  const navigateRef = useNavigateRef()
 
   // Monta e desmonta a timeline GSAP/ScrollTrigger em torno desta seção.
   // Todo o "cérebro" do scroll vive nesse hook — este componente só
-  // fornece os refs de DOM que ele precisa medir/pinar.
+  // fornece os refs de DOM que ele precisa medir/pinar. `navigateRef` é
+  // preenchido pelo próprio hook com a função que a Timeline usa pra
+  // navegar por clique (ver useScrollProgress.jsx).
   useScrollTimeline({
     sectionRef,
     pinRef,
@@ -51,6 +54,7 @@ function EvolutionSectionContent() {
     panelRef,
     deviceCount: devices.length,
     progressRef,
+    navigateRef,
   })
 
   return (
