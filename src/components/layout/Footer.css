@@ -1,0 +1,13 @@
+.footer {
+  padding: 32px clamp(20px, 5vw, 64px) 40px;
+  border-top: 1px solid var(--color-border);
+}
+
+.footer p {
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-align: center;
+}

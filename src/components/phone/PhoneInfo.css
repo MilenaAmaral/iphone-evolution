@@ -1,0 +1,27 @@
+.phone-info {
+  max-width: 26rem;
+  padding: 24px;
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.phone-info__year {
+  font-size: 13px;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.phone-info__name {
+  margin: 4px 0 12px;
+  font-size: 1.5rem;
+  color: var(--color-text-strong);
+}
+
+.phone-info__highlights {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}

@@ -1,0 +1,9 @@
+.app {
+  position: relative;
+  min-height: 100svh;
+}
+
+.app__content {
+  position: relative;
+  z-index: 1;
+}

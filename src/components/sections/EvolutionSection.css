@@ -1,0 +1,22 @@
+.evolution-section {
+  position: relative;
+  z-index: 1;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 24px;
+  padding: 96px clamp(20px, 5vw, 64px);
+}
+
+.evolution-section__title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  color: var(--color-text-strong);
+  margin: 0;
+}
+
+.evolution-section__lead {
+  max-width: 34rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}

@@ -1,0 +1,63 @@
+/**
+ * index.css
+ *
+ * Reset global + tokens de design (cores, tipografia) em custom
+ * properties. Paleta e tipografia são deliberadamente distintas da
+ * identidade visual da Apple (sem azul-sistema, sem fonte San Francisco)
+ * para manter o projeto original, conforme pedido no briefing.
+ */
+
+:root {
+  --color-bg: #0b0b0d;
+  --color-surface: #131316;
+  --color-border: #232327;
+  --color-text-strong: #f2f1ee;
+  --color-text-muted: #9a978f;
+  --color-accent: #d8b26b;
+  --color-accent-bg: rgba(216, 178, 107, 0.12);
+
+  --font-sans: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text-strong);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100svh;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+button {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}

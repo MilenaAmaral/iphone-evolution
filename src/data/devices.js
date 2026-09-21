@@ -1,0 +1,352 @@
+/**
+ * devices.js
+ *
+ * Dataset canônico da timeline. Cada objeto representa uma geração do
+ * iPhone exibida na experiência.
+ *
+ * Fonte dos dados: especificações técnicas públicas (páginas de suporte/
+ * especificações da Apple e registros históricos de lançamento). Textos de
+ * marketing, fotos e identidade visual da Apple NÃO foram copiados —
+ * apenas fatos técnicos objetivos (medidas, componentes, datas).
+ *
+ * Convenções:
+ * - `generation`: posição cronológica do aparelho NESTA timeline (1 a 19).
+ *   Não é um índice oficial da Apple — é só a ordem de exibição aqui.
+ * - `modelPath`: caminho do modelo 3D otimizado (.glb). Fica `null` em
+ *   todos os itens porque nenhum modelo 3D real foi produzido ainda — isso
+ *   é trabalho da Fase 0 do pipeline de assets (ver doc de arquitetura).
+ *   Enquanto for `null`, `PhoneModel` renderiza um placeholder geométrico.
+ * - Modelos "Plus/Pro/Max/Mini" foram deixados de fora para manter uma
+ *   linha do tempo de uma geração por ano. A exceção é o ciclo 2026: a
+ *   Apple não lançou uma variante "padrão" do iPhone 18 (ver highlight do
+ *   próprio item), então o iPhone 18 Pro é o representante dessa geração.
+ * - Câmeras do iPhone 3G e 3GS: a Apple nunca divulgou a abertura (ƒ) dessas
+ *   lentes publicamente — por isso o campo `camera` desses dois itens diz
+ *   isso de forma explícita, em vez de inventar um número.
+ */
+
+export const devices = [
+  {
+    id: 'iphone-3g',
+    name: 'iPhone 3G',
+    generation: 1,
+    year: 2008,
+    display: '3,5" LCD, 480×320 px (163 ppi)',
+    processor: 'Chip baseado em ARM11 (Samsung), 412 MHz',
+    camera: '2MP traseira — abertura não divulgada oficialmente pela Apple',
+    weight: '133 g',
+    thickness: '12,3 mm',
+    colors: ['Preto', 'Branco'],
+    highlights: [
+      'Primeiro iPhone com suporte a redes 3G/UMTS e GPS',
+      'Lançado junto com a App Store (iPhone OS 2.0)',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-3gs',
+    name: 'iPhone 3GS',
+    generation: 2,
+    year: 2009,
+    display: '3,5" LCD, 480×320 px',
+    processor: 'Samsung S5PC100 (ARM Cortex-A8), 600 MHz',
+    camera: '3MP traseira com autofoco, vídeo VGA — abertura não divulgada oficialmente pela Apple',
+    weight: '135 g',
+    thickness: '12,3 mm',
+    colors: ['Preto', 'Branco'],
+    highlights: [
+      'Primeiro iPhone com gravação de vídeo',
+      'Introduziu bússola digital e o Controle por Voz',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-4',
+    name: 'iPhone 4',
+    generation: 3,
+    year: 2010,
+    display: '3,5" Retina (IPS LCD), 960×640 px, 326 ppi',
+    processor: 'Apple A4',
+    camera: '5MP traseira, ƒ/2.8',
+    weight: '137 g',
+    thickness: '9,3 mm',
+    colors: ['Preto', 'Branco (chegou em abril de 2011)'],
+    highlights: [
+      'Primeiro iPhone com tela "Retina"',
+      'Primeiro com câmera frontal (FaceTime) e giroscópio',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-4s',
+    name: 'iPhone 4S',
+    generation: 4,
+    year: 2011,
+    display: '3,5" Retina (IPS LCD), 960×640 px',
+    processor: 'Apple A5 (dual-core)',
+    camera: '8MP traseira, ƒ/2.4, vídeo 1080p',
+    weight: '140 g',
+    thickness: '9,3 mm',
+    colors: ['Preto', 'Branco'],
+    highlights: [
+      'Introduziu a Siri',
+      'Último iPhone com conector dock de 30 pinos',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-5',
+    name: 'iPhone 5',
+    generation: 5,
+    year: 2012,
+    display: '4" Retina (IPS LCD)',
+    processor: 'Apple A6',
+    camera: '8MP traseira, ƒ/2.4',
+    weight: '112 g',
+    thickness: '7,6 mm',
+    colors: ['Preto e Ardósia', 'Branco e Prata'],
+    highlights: [
+      'Introduziu o conector Lightning, substituindo o dock de 30 pinos',
+      'Primeiro iPhone com LTE e nano-SIM',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-5s',
+    name: 'iPhone 5S',
+    generation: 6,
+    year: 2013,
+    display: '4" Retina (IPS LCD), 326 ppi',
+    processor: 'Apple A7 (primeiro chip de 64 bits em um smartphone)',
+    camera: '8MP traseira, ƒ/2.2',
+    weight: '112 g',
+    thickness: '7,6 mm',
+    colors: ['Cinza-espacial', 'Prata', 'Dourado'],
+    highlights: [
+      'Primeiro iPhone com Touch ID',
+      'Primeiro processador de 64 bits do mercado mobile',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-6',
+    name: 'iPhone 6',
+    generation: 7,
+    year: 2014,
+    display: '4,7" Retina HD (IPS LCD), 1334×750 px',
+    processor: 'Apple A8',
+    camera: '8MP traseira, ƒ/2.2',
+    weight: '129 g',
+    thickness: '6,9 mm',
+    colors: ['Cinza-espacial', 'Prata', 'Dourado'],
+    highlights: [
+      'Introduziu NFC e Apple Pay na linha padrão',
+      'Adicionou barômetro',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-6s',
+    name: 'iPhone 6S',
+    generation: 8,
+    year: 2015,
+    display: '4,7" Retina HD (IPS LCD)',
+    processor: 'Apple A9',
+    camera: '12MP traseira, ƒ/2.2',
+    weight: '143 g',
+    thickness: '7,1 mm',
+    colors: ['Cinza-espacial', 'Prata', 'Dourado', 'Ouro rosa'],
+    highlights: [
+      'Primeiro iPhone com gravação de vídeo em 4K',
+      'Introduziu o 3D Touch',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-7',
+    name: 'iPhone 7',
+    generation: 9,
+    year: 2016,
+    display: '4,7" Retina HD (IPS LCD)',
+    processor: 'Apple A10 Fusion',
+    camera: '12MP traseira, ƒ/1.8',
+    weight: '138 g',
+    thickness: '7,1 mm',
+    colors: ['Preto brilhante', 'Preto', 'Prata', 'Dourado', 'Ouro rosa', '(Product)RED (adicionado em 2017)'],
+    highlights: [
+      'Primeiro iPhone oficialmente resistente à água e poeira (IP67)',
+      'Removeu a entrada de fone de ouvido de 3,5 mm',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-8',
+    name: 'iPhone 8',
+    generation: 10,
+    year: 2017,
+    display: '4,7" Retina HD (IPS LCD)',
+    processor: 'Apple A11 Bionic',
+    camera: '12MP traseira, ƒ/1.8',
+    weight: '148 g',
+    thickness: '7,3 mm',
+    colors: ['Cinza-espacial', 'Prata', 'Dourado', '(Product)RED (adicionado em abril de 2018)'],
+    highlights: [
+      'Traseira de vidro viabilizou carregamento sem fio (Qi) pela primeira vez na linha padrão',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-x',
+    name: 'iPhone X',
+    generation: 11,
+    year: 2017,
+    display: '5,8" Super Retina HD OLED — primeira tela OLED da linha',
+    processor: 'Apple A11 Bionic',
+    camera: 'Dupla 12MP — grande angular ƒ/1.8 + teleobjetiva ƒ/2.4',
+    weight: '174 g',
+    thickness: '7,7 mm',
+    colors: ['Prata', 'Cinza-espacial'],
+    highlights: [
+      'Primeiro iPhone com Face ID e sem botão Home',
+      'Primeira tela OLED usada em um iPhone',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-11',
+    name: 'iPhone 11',
+    generation: 12,
+    year: 2019,
+    display: '6,1" Liquid Retina (IPS LCD), 1792×828 px',
+    processor: 'Apple A13 Bionic',
+    camera: 'Dupla 12MP — grande angular ƒ/1.8 + ultra grande angular ƒ/2.4',
+    weight: '194 g',
+    thickness: '8,3 mm',
+    colors: ['Roxo', 'Amarelo', 'Verde', 'Preto', 'Branco', '(Product)RED'],
+    highlights: [
+      'Introduziu o Modo Noturno',
+      'Primeira câmera ultra grande angular dupla na linha padrão',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-12',
+    name: 'iPhone 12',
+    generation: 13,
+    year: 2020,
+    display: '6,1" Super Retina XDR OLED, 2532×1170 px',
+    processor: 'Apple A14 Bionic',
+    camera: 'Dupla 12MP — grande angular ƒ/1.6 + ultra grande angular ƒ/2.4',
+    weight: '162 g',
+    thickness: '7,4 mm',
+    colors: ['Preto', 'Branco', '(Product)RED', 'Verde', 'Azul', 'Roxo (adicionado em abril de 2021)'],
+    highlights: [
+      'Primeiro iPhone padrão com tela OLED e conectividade 5G',
+      'Introduziu o sistema magnético MagSafe',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-13',
+    name: 'iPhone 13',
+    generation: 14,
+    year: 2021,
+    display: '6,1" Super Retina XDR OLED',
+    processor: 'Apple A15 Bionic',
+    camera: 'Dupla 12MP — grande angular ƒ/1.6 + ultra grande angular ƒ/2.4',
+    weight: '174 g',
+    thickness: '7,65 mm',
+    colors: ['Meia-noite', 'Estelar', '(Product)RED', 'Azul', 'Rosa', 'Verde (adicionado em março de 2022)'],
+    highlights: [
+      'Introduziu o Modo Cinema',
+      'Estabilização de imagem por deslocamento de sensor chegou ao modelo padrão',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-14',
+    name: 'iPhone 14',
+    generation: 15,
+    year: 2022,
+    display: '6,1" Super Retina XDR OLED',
+    processor: 'Apple A15 Bionic',
+    camera: 'Dupla 12MP — grande angular ƒ/1.5 + ultra grande angular ƒ/2.4',
+    weight: '172 g',
+    thickness: '7,8 mm',
+    colors: ['Azul', 'Meia-noite', '(Product)RED', 'Estelar', 'Roxo', 'Amarelo (adicionado em março de 2023)'],
+    highlights: [
+      'Primeiro iPhone padrão desde o 3G a reaproveitar o chip do ano anterior',
+      'Introduziu SOS via satélite e detecção de colisão',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-15',
+    name: 'iPhone 15',
+    generation: 16,
+    year: 2023,
+    display: '6,1" Super Retina XDR OLED',
+    processor: 'Apple A16 Bionic',
+    camera: '48MP principal ƒ/1.6 + 12MP ultra grande angular ƒ/2.4',
+    weight: '171 g',
+    thickness: '7,8 mm',
+    colors: ['Azul', 'Rosa', 'Amarelo', 'Verde', 'Preto'],
+    highlights: [
+      'Primeiros iPhones com USB-C, substituindo o Lightning',
+      'A Dynamic Island chegou ao modelo padrão',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-16',
+    name: 'iPhone 16',
+    generation: 17,
+    year: 2024,
+    display: '6,1" Super Retina XDR OLED, 2556×1179 px',
+    processor: 'Apple A18',
+    camera: '48MP principal ƒ/1.6 + 12MP ultra grande angular ƒ/2.2',
+    weight: '170 g',
+    thickness: '7,8 mm',
+    colors: ['Ultramarine', 'Teal', 'Rosa', 'Branco', 'Preto'],
+    highlights: [
+      'Primeiro iPhone padrão com o botão Action e o novo botão Camera Control',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-17',
+    name: 'iPhone 17',
+    generation: 18,
+    year: 2025,
+    display: '6,3" Super Retina XDR OLED LTPO, 2622×1206 px, 120 Hz',
+    processor: 'Apple A19',
+    camera: '48MP principal ƒ/1.6 + 48MP ultra grande angular ƒ/2.2',
+    weight: '177 g',
+    thickness: '7,95 mm',
+    colors: ['Lavanda', 'Sage', 'Azul-névoa', 'Branco', 'Preto'],
+    highlights: [
+      'Primeiro iPhone padrão com tela ProMotion de 120Hz',
+      'Armazenamento inicial passou de 128GB para 256GB',
+    ],
+    modelPath: null,
+  },
+  {
+    id: 'iphone-18-pro',
+    name: 'iPhone 18 Pro',
+    generation: 19,
+    year: 2026,
+    display: '6,3" Super Retina XDR OLED (tela cheia)',
+    processor: 'Apple A20 Pro',
+    camera: 'Tripla 48MP — principal com abertura variável (ƒ/1.48–ƒ/4.0) + ultra grande angular ƒ/2.2 + teleobjetiva 4x (100mm) ƒ/2.8',
+    weight: '211 g',
+    thickness: '8,75 mm',
+    colors: ['Preto', 'Prata', 'Glacier', 'Bordô'],
+    highlights: [
+      'Neste ciclo a Apple não lançou uma variante "padrão": o iPhone 18 Pro é o modelo de entrada da linha 2026, ao lado do iPhone Duo dobrável',
+      'Primeira câmera principal da linha com abertura variável',
+    ],
+    modelPath: null,
+  },
+]
+
+export const getDeviceById = (id) => devices.find((device) => device.id === id)

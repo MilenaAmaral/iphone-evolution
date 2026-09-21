@@ -1,0 +1,14 @@
+.phone-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  /* pointer-events: none deixa cliques atravessarem para o conteúdo DOM
+     que fica por cima (timeline, botões etc.) — o canvas é só visual. */
+  pointer-events: none;
+}
+
+.phone-viewer canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
