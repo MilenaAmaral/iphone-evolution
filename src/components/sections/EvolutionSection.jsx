@@ -3,6 +3,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Timeline from '../timeline/Timeline'
 import PhoneInfo from '../phone/PhoneInfo'
+import PhoneViewer from '../phone/PhoneViewer'
+import { useExperienceStore } from '../../store/useExperienceStore'
 import './EvolutionSection.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -13,9 +15,13 @@ gsap.registerPlugin(ScrollTrigger)
  * acoplar isso ao scroll com ScrollControls/ScrollTrigger, conforme o
  * roadmap do doc de arquitetura (fases 4 em diante) — por enquanto, o
  * GSAP aqui cuida só de uma revelação simples da seção ao entrar em tela.
+ *
+ * É quem lê o store e alimenta o <PhoneViewer> por props (modelPath) — o
+ * viewer em si não sabe nada sobre "aparelho ativo" ou Zustand.
  */
 function EvolutionSection() {
   const sectionRef = useRef(null)
+  const activeDevice = useExperienceStore((state) => state.activeDevice)
 
   useEffect(() => {
     const el = sectionRef.current
@@ -44,8 +50,15 @@ function EvolutionSection() {
         Escolha uma geração na linha do tempo para explorar o modelo 3D e os
         destaques daquele ano.
       </p>
-      <Timeline />
-      <PhoneInfo />
+      <div className="evolution-section__grid">
+        <div className="evolution-section__viewer">
+          <PhoneViewer modelPath={activeDevice.modelPath} />
+        </div>
+        <div className="evolution-section__panel">
+          <Timeline />
+          <PhoneInfo />
+        </div>
+      </div>
     </section>
   )
 }
