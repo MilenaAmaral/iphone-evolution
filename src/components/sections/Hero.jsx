@@ -7,28 +7,39 @@ import './Hero.css'
 // fica fixo atrás dela) e só cuida de uma pequena animação de entrada com
 // GSAP — sem lógica de dados.
 function Hero() {
-  const titleRef = useRef(null)
+  const titleWordsRef = useRef([])
   const subtitleRef = useRef(null)
   const hintRef = useRef(null)
+  const titleWords = ['Uma', 'evolução', 'em', '3D.']
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (prefersReducedMotion()) {
-        // Mantém o fade (a entrada não deixa de existir), mas sem o
-        // deslocamento vertical nem o escalonamento entre os três
-        // elementos — tudo aparece junto, quase instantâneo.
-        gsap.from([titleRef.current, subtitleRef.current, hintRef.current], {
-          opacity: 0,
-          duration: 0.3,
-        })
+        gsap.set(titleWordsRef.current, { opacity: 1, yPercent: 0 })
+        gsap.set(subtitleRef.current, { opacity: 1, scaleX: 1 })
+        gsap.set(hintRef.current, { opacity: 1, y: 0 })
         return
       }
 
       gsap
         .timeline({ defaults: { ease: 'power3.out' } })
-        .from(titleRef.current, { opacity: 0, y: 24, duration: 0.9 })
-        .from(subtitleRef.current, { opacity: 0, y: 16, duration: 0.7 }, '-=0.45')
-        .from(hintRef.current, { opacity: 0, duration: 0.6 }, '-=0.2')
+        .from(titleWordsRef.current, {
+          opacity: 0,
+          yPercent: 115,
+          duration: 0.78,
+          stagger: 0.1,
+        }, 0.32)
+        .fromTo(subtitleRef.current, {
+          opacity: 0,
+          scaleX: 0,
+          transformOrigin: 'left center',
+        }, {
+          opacity: 1,
+          scaleX: 1,
+          duration: 0.82,
+          ease: 'power2.inOut',
+        }, '-=0.34')
+        .from(hintRef.current, { opacity: 0, y: 8, duration: 0.5 }, '-=0.12')
     })
 
     return () => ctx.revert()
@@ -36,8 +47,20 @@ function Hero() {
 
   return (
     <section className="hero" id="topo">
-      <h1 ref={titleRef} className="hero__title">
-        Uma evolução em 3D.
+      <h1 className="hero__title" aria-label="Uma evolução em 3D.">
+        {titleWords.map((word, index) => (
+          <span className="hero__word-clip" key={word}>
+            <span
+              ref={(element) => {
+                if (element) titleWordsRef.current[index] = element
+              }}
+              className="hero__word"
+              aria-hidden="true"
+            >
+              {word}
+            </span>
+          </span>
+        ))}
       </h1>
       <p ref={subtitleRef} className="hero__subtitle">
         Explore a transformação do iPhone através das gerações.
