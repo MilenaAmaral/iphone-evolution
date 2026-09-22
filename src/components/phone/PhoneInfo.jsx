@@ -12,6 +12,9 @@ function PhoneInfo() {
     <div className="phone-info">
       <span className="phone-info__year">{device.year}</span>
       <h3 className="phone-info__name">{device.name}</h3>
+      {device.image && (
+        <img className="phone-info__image" src={device.image} alt={`Referência visual do ${device.name}`} />
+      )}
       <ul className="phone-info__highlights">
         {device.highlights.map((point) => (
           <li key={point}>{point}</li>

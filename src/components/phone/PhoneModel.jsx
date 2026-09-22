@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { useGLTF, useAnimations, RoundedBox } from '@react-three/drei'
+import { useGLTF, useAnimations } from '@react-three/drei'
 import { SkeletonUtils } from 'three-stdlib'
 import { USE_DRACO, USE_MESHOPT } from '../../three/gltfCache'
 
@@ -16,11 +16,7 @@ import { USE_DRACO, USE_MESHOPT } from '../../three/gltfCache'
  * de ter um modelo gerado para ele.
  */
 function PhoneModel({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0] }) {
-  if (!modelPath) {
-    return (
-      <PlaceholderPhone rotation={rotation} scale={scale} position={position} />
-    )
-  }
+  if (!modelPath) return null
 
   return (
     <GltfPhoneModel
@@ -101,27 +97,6 @@ function GltfPhoneModel({ modelPath, rotation, scale, position }) {
       dispose={null}
     >
       <primitive object={clonedScene} />
-    </group>
-  )
-}
-
-// Placeholder geométrico: corpo + "tela" em caixas arredondadas. Fica no
-// lugar do modelo real enquanto `modelPath` não existir para o aparelho.
-function PlaceholderPhone({ rotation, scale, position }) {
-  return (
-    <group rotation={rotation} scale={scale} position={position}>
-      <RoundedBox args={[0.9, 1.9, 0.09]} radius={0.12} smoothness={4} castShadow receiveShadow>
-        <meshStandardMaterial color="#1c1c1e" metalness={0.6} roughness={0.25} />
-      </RoundedBox>
-      <RoundedBox
-        args={[0.8, 1.76, 0.01]}
-        radius={0.1}
-        smoothness={4}
-        position={[0, 0, 0.052]}
-        castShadow
-      >
-        <meshStandardMaterial color="#050506" metalness={0.2} roughness={0.15} />
-      </RoundedBox>
     </group>
   )
 }

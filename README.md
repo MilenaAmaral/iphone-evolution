@@ -16,6 +16,24 @@ npm install
 npm run dev
 ```
 
+## Modelos 3D reais
+
+Para trocar os modelos de teste por versões reais dos iPhones, basta colocar os arquivos `.glb` em `public/models`, preservando os nomes usados no dataset em `src/data/devices.js`.
+
+Exemplo:
+- `public/models/iphone-3g.glb`
+- `public/models/iphone-4.glb`
+- `public/models/iphone-15.glb`
+- `public/models/iphone-18-pro.glb`
+
+Validação rápida:
+
+```bash
+npm run check:models
+```
+
+Esse script confirma se todos os aparelhos referenciados no projeto têm um modelo correspondente na pasta pública.
+
 ## Estrutura do projeto
 
 ```
