@@ -18,6 +18,7 @@ function RealIphonesSection() {
   const [activeIndex, setActiveIndex] = useState(0)
   const activeGeneration = evolutionGenerations[activeIndex]
   const isFinalGeneration = activeGeneration.year === 2026
+  const isModelGeneration = activeGeneration.year === 2007 || isFinalGeneration
   const modelPath = isFinalGeneration ? FINAL_MODEL : ORIGINAL_MODEL
   const activeSpecs = [
     ['Tela', activeGeneration.display],
@@ -67,8 +68,14 @@ function RealIphonesSection() {
 
       <div className="real-iphones__layout">
         <div className="real-iphones__viewer">
-          {viewerInView && (
+          {viewerInView && isModelGeneration && (
             <IphoneViewer key={modelPath} modelPath={modelPath} label={`Modelo 3D do ${isFinalGeneration ? 'iPhone 18 Pro Max' : 'iPhone original'}`} />
+          )}
+          {!isModelGeneration && (
+            <div className="real-iphones__text-stage" aria-hidden="true">
+              <span>Uma geração em transformação</span>
+              <strong>{activeGeneration.year}</strong>
+            </div>
           )}
         </div>
 
