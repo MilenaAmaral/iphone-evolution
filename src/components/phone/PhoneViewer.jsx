@@ -31,6 +31,12 @@ function PhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0
       contactShadowsOpacity={0.45}
       contactShadowsBlur={2.6}
       orbitControls
+      autoRotate
+      autoRotateSpeed={0.6}
+      enableZoom
+      minDistance={2}
+      maxDistance={5}
+      shadows
       label={label}
     />
   )

@@ -142,7 +142,7 @@ function EvolutionSectionContent() {
           >
             <SceneLighting />
 
-            <SceneErrorBoundary modelPath={[activeDevice.modelPath, nextDevice?.modelPath]}>
+            <SceneErrorBoundary modelPath={activeDevice.modelPath}>
               {/* Dois aparelhos montados ao mesmo tempo: o que está
                   saindo de cena (activeDevice) e o que está entrando
                   (nextDevice), conforme o usuário rola dentro do segmento
@@ -168,6 +168,7 @@ function EvolutionSectionContent() {
                   progressRef={progressRef}
                 />
               </Suspense>
+            </SceneErrorBoundary>
               {nextDevice && (
                 // fallback={null}: o "próximo" aparelho não é o foco
                 // principal da tela — se o glb dele ainda não tiver
@@ -176,17 +177,18 @@ function EvolutionSectionContent() {
                 // aparelho atual, que já está totalmente carregado e
                 // visível. O spinner "de verdade" (ModelLoaderFallback)
                 // fica reservado pro aparelho principal, acima.
-                <Suspense fallback={null}>
-                  <ScrollControlledPhone
-                    key={nextDevice.id}
-                    device={nextDevice}
-                    deviceIndex={activeIndex + 1}
-                    segments={segments}
-                    progressRef={progressRef}
-                  />
-                </Suspense>
+                <SceneErrorBoundary modelPath={nextDevice.modelPath}>
+                  <Suspense fallback={null}>
+                    <ScrollControlledPhone
+                      key={nextDevice.id}
+                      device={nextDevice}
+                      deviceIndex={activeIndex + 1}
+                      segments={segments}
+                      progressRef={progressRef}
+                    />
+                  </Suspense>
+                </SceneErrorBoundary>
               )}
-            </SceneErrorBoundary>
 
             <ScrollCameraRig progressRef={progressRef} />
 

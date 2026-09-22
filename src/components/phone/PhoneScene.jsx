@@ -6,6 +6,7 @@ import PhoneModel from './PhoneModel'
 import SceneErrorBoundary from './SceneErrorBoundary'
 import SceneLighting from './SceneLighting'
 import ModelLoaderFallback from './ModelLoaderFallback'
+import ModelUnavailable from './ModelUnavailable'
 import './PhoneViewer.css'
 
 /**
@@ -30,6 +31,15 @@ function PhoneScene({
   contactShadowsOpacity = 0.45,
   contactShadowsBlur = 2.6,
   orbitControls = false,
+  autoRotate = false,
+  autoRotateSpeed = 0.6,
+  enableZoom = true,
+  minDistance = 2,
+  maxDistance = 5,
+  minPolarAngle = Math.PI / 4,
+  maxPolarAngle = Math.PI / 1.7,
+  shadows = true,
+  dpr = [1, 2],
   label,
 }) {
   return (
@@ -41,16 +51,26 @@ function PhoneScene({
     // `label` — sem ele, um `role="img"` com `aria-label` vazio seria
     // pior que não ter nada.
     <div className="phone-viewer" role={label ? 'img' : undefined} aria-label={label}>
-      <Canvas frameloop={frameloop} shadows={orbitControls} dpr={[1, 2]} camera={camera} gl={{ antialias: true }}>
+      <Canvas
+        frameloop={frameloop}
+        shadows={shadows}
+        dpr={dpr}
+        camera={camera}
+        gl={{ antialias: true, powerPreference: 'high-performance' }}
+      >
         {/* Iluminação + ambiente procedural compartilhados com a cena de
             scroll (ver SceneLighting.jsx) — sem depender de HDRI externo. */}
         <SceneLighting />
 
-        <SceneErrorBoundary modelPath={modelPath}>
-          <Suspense fallback={<ModelLoaderFallback />}>
-            <PhoneModel modelPath={modelPath} rotation={rotation} scale={scale} position={position} />
-          </Suspense>
-        </SceneErrorBoundary>
+        {modelPath ? (
+          <SceneErrorBoundary modelPath={modelPath}>
+            <Suspense fallback={<ModelLoaderFallback />}>
+              <PhoneModel modelPath={modelPath} rotation={rotation} scale={scale} position={position} />
+            </Suspense>
+          </SceneErrorBoundary>
+        ) : (
+          <ModelUnavailable />
+        )}
 
         {/* Sombra de contato: soft shadow barata, sem precisar de um chão
             "de verdade" recebendo sombra — mantém a cena minimalista. */}
@@ -70,12 +90,13 @@ function PhoneScene({
           <OrbitControls
             makeDefault
             enablePan={false}
-            minDistance={2}
-            maxDistance={5}
-            minPolarAngle={Math.PI / 4}
-            maxPolarAngle={Math.PI / 1.7}
-            autoRotate
-            autoRotateSpeed={0.6}
+            enableZoom={enableZoom}
+            minDistance={minDistance}
+            maxDistance={maxDistance}
+            minPolarAngle={minPolarAngle}
+            maxPolarAngle={maxPolarAngle}
+            autoRotate={autoRotate}
+            autoRotateSpeed={autoRotateSpeed}
           />
         )}
       </Canvas>
@@ -93,6 +114,15 @@ PhoneScene.propTypes = {
   contactShadowsOpacity: PropTypes.number,
   contactShadowsBlur: PropTypes.number,
   orbitControls: PropTypes.bool,
+  autoRotate: PropTypes.bool,
+  autoRotateSpeed: PropTypes.number,
+  enableZoom: PropTypes.bool,
+  minDistance: PropTypes.number,
+  maxDistance: PropTypes.number,
+  minPolarAngle: PropTypes.number,
+  maxPolarAngle: PropTypes.number,
+  shadows: PropTypes.bool,
+  dpr: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
   label: PropTypes.string,
 }
 
