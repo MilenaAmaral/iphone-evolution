@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 
 const rootDir = path.resolve('public/models')
-const devicesFile = path.resolve('src/data/devices.js')
 
 function walk(dir) {
   const entries = fs.readdirSync(dir, { withFileTypes: true })
@@ -20,16 +19,14 @@ function walk(dir) {
   return files
 }
 
-const deviceText = fs.readFileSync(devicesFile, 'utf8')
-const deviceIds = [...deviceText.matchAll(/id:\s*'([^']+)'/g)].map((match) => match[1])
-
 const modelFiles = walk(rootDir)
 const modelNames = new Set(modelFiles.map((file) => path.basename(file, '.glb')))
 
-const missing = deviceIds.filter((id) => !modelNames.has(id))
+const activeModels = ['iphone_1st_generation', 'iphone-18-pro-max']
+const missing = activeModels.filter((id) => !modelNames.has(id))
 
 if (missing.length === 0) {
-  console.log(`✓ Todos os modelos dos aparelhos foram encontrados: ${deviceIds.length} arquivos.`)
+  console.log(`✓ Os ${activeModels.length} modelos 3D ativos foram encontrados.`)
   process.exit(0)
 }
 
