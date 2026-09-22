@@ -8,6 +8,7 @@ const LINKS = [
   { href: '#evolucao', label: 'Evolução' },
   { href: '#design', label: 'Design' },
   { href: '#atualidade', label: 'Atual' },
+  { href: '#comparar', label: 'Comparar' },
   { href: '#specs', label: 'Ficha técnica' },
 ]
 

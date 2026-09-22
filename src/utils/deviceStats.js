@@ -48,3 +48,22 @@ export const getLensCount = (device) => {
   if (text.includes('dupla')) return 2
   return 1
 }
+
+// Formata uma DIFERENÇA (já calculada por quem chama, ex.: peso do
+// aparelho novo menos o do antigo) como texto assinado em pt-BR —
+// "+78 g", "-3,55 mm", "±0 g". Só formatação de exibição: quem decide o
+// valor em si é sempre uma subtração entre dois números já extraídos de
+// devices.js (ver getThicknessMm/getWeightGrams/getDisplayInches acima),
+// nunca um número novo inventado aqui.
+export const formatSignedNumber = (value, { unit = '', decimals = 1 } = {}) => {
+  if (value === null || value === undefined || Number.isNaN(value)) return null
+
+  const rounded = Number(value.toFixed(decimals))
+  const sign = rounded > 0 ? '+' : rounded < 0 ? '' : '±'
+  const text = Math.abs(rounded).toLocaleString('pt-BR', {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: decimals,
+  })
+
+  return `${sign}${rounded < 0 ? '-' : ''}${text}${unit}`
+}

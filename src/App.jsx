@@ -8,11 +8,12 @@ import CamerasSection from './components/sections/CamerasSection'
 import PerformanceSection from './components/sections/PerformanceSection'
 import DesignSection from './components/sections/DesignSection'
 import CurrentSection from './components/sections/CurrentSection'
+import CompareSection from './components/sections/CompareSection'
 import SpecsSection from './components/sections/SpecsSection'
 import './App.css'
 
 /**
- * App: monta o layout raiz como uma sequência narrativa de 8 capítulos —
+ * App: monta o layout raiz como uma sequência narrativa de 9 capítulos —
  * cada seção é um componente próprio, na ordem em que a história é
  * contada (ver o comentário de cada arquivo em src/components/sections
  * pra entender de onde vêm os dados de cada capítulo):
@@ -25,15 +26,20 @@ import './App.css'
  *   6. PerformanceSection — PERFORMANCE (processadores)
  *   7. DesignSection     — DESIGN (espessura, peso, tela, materiais)
  *   8. CurrentSection    — ATUALIDADE (geração mais recente)
+ *   9. CompareSection    — VEJA A EVOLUÇÃO (slider antes/depois interativo)
  *
- * `SpecsSection` continua depois, como um apêndice técnico — a ficha
- * completa do aparelho ativo em EvolutionSection, pra quem quiser
- * consultar os números sem voltar a rolar a história inteira.
+ * CompareSection fica por último, como um fechamento prático da história:
+ * depois de ver a jornada completa, o usuário compara os dois extremos
+ * (primeiro x mais recente) com as próprias mãos. `SpecsSection` continua
+ * depois disso, como um apêndice técnico — a ficha completa do aparelho
+ * ativo em EvolutionSection, pra quem quiser consultar os números sem
+ * voltar a rolar a história inteira.
  *
- * O <PhoneViewer> é um componente autocontido, dimensionado pelo próprio
- * container que o usa (ver PhoneViewer.css) — por isso cada capítulo que
- * precisa dele (Origem, Evolução, Atualidade) só o instancia dentro de si,
- * em vez de um único viewer fixo atrás da página inteira.
+ * O <PhoneViewer>/<StaticPhoneViewer> é um componente autocontido,
+ * dimensionado pelo próprio container que o usa (ver PhoneViewer.css) —
+ * por isso cada capítulo que precisa dele (Origem, Evolução, Atualidade,
+ * Comparar) só o instancia dentro de si, em vez de um único viewer fixo
+ * atrás da página inteira.
  */
 function App() {
   return (
@@ -48,6 +54,7 @@ function App() {
         <PerformanceSection />
         <DesignSection />
         <CurrentSection />
+        <CompareSection />
         <SpecsSection />
       </main>
       <Footer />
