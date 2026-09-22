@@ -14,8 +14,9 @@ function IphoneViewer({ modelPath = MODEL_PATH, label = 'Visualizador 3D do iPho
   return (
     <div className="phone-viewer" role="img" aria-label={label}>
       <Canvas
-        shadows
-        dpr={[1, 2]}
+        frameloop="demand"
+        shadows="basic"
+        dpr={[1, 1.5]}
         camera={{ position: [0.15, 0.1, 3.8], fov: 35, near: 0.1, far: 100 }}
         gl={{ antialias: true, powerPreference: 'high-performance' }}
       >

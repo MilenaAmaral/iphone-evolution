@@ -10,8 +10,8 @@ import './CompareSection.css'
 // A comparação usa os dois modelos reais disponíveis nas extremidades da
 // coleção. Os dados técnicos continuam vindo de devices.js; realIphones.js
 // fornece os caminhos exatos dos GLBs adicionados em public/models.
-const OLDER = { ...devices[0], ...realIphones[0] }
-const NEWER = { ...devices[devices.length - 1], ...realIphones[realIphones.length - 1] }
+const OLDER = { ...devices[0], ...realIphones[0], storage: '4 GB, 8 GB e 16 GB', connectivity: 'GSM / EDGE' }
+const NEWER = { ...devices[devices.length - 1], ...realIphones[realIphones.length - 1], storage: 'Não disponível no projeto', connectivity: 'Não disponível no projeto' }
 
 // Cada linha mostra o texto ORIGINAL de devices.js como valor (nunca um
 // resumo inventado). `getDelta`, quando existe, é só uma subtração entre
@@ -21,6 +21,8 @@ const COMPARISON_ROWS = [
   { key: 'display', label: 'Tela' },
   { key: 'processor', label: 'Processador' },
   { key: 'camera', label: 'Câmera' },
+  { key: 'storage', label: 'Armazenamento' },
+  { key: 'connectivity', label: 'Conectividade' },
   {
     key: 'weight',
     label: 'Peso',
@@ -148,8 +150,8 @@ function CompareSection() {
                 {row.label}
                 {delta && <span className="compare-table__delta">{delta}</span>}
               </dt>
-              <dd className="compare-table__col compare-table__col--older">{format(OLDER)}</dd>
-              <dd className="compare-table__col compare-table__col--newer">{format(NEWER)}</dd>
+                  <dd className="compare-table__col compare-table__col--older">{format(OLDER) ?? 'Não disponível'}</dd>
+                  <dd className="compare-table__col compare-table__col--newer">{format(NEWER) ?? 'Não disponível'}</dd>
             </div>
           )
         })}
