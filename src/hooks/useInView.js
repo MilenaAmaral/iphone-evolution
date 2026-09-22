@@ -18,8 +18,16 @@ import { useEffect, useState } from 'react'
  * (barato remontar depois) porque o modelo/textura já está no cache do
  * `useGLTF` (ver src/three/gltfCache.js) — remontar não refaz nenhum
  * download, só reconstrói a cena a partir do que já está em memória.
+ *
+ * `rootMargin` padrão de 15% (antes era 35%): uma margem grande o
+ * suficiente pra evitar montar/desmontar de novo a cada pixel de scroll
+ * perto da borda, mas pequena o bastante pra reduzir a chance real de
+ * duas seções com Canvas ficarem "perto da viewport" ao mesmo tempo (ex.:
+ * EvolutionSection ainda com `frameloop: 'always'` enquanto CompareSection
+ * já montou os próprios <Canvas>) — em GPU fraca, isso significava mais
+ * de um contexto WebGL renderizando ao mesmo tempo sem necessidade.
  */
-export function useInView(ref, { rootMargin = '35% 0px' } = {}) {
+export function useInView(ref, { rootMargin = '15% 0px' } = {}) {
   const [inView, setInView] = useState(false)
 
   useEffect(() => {

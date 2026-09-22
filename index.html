@@ -4,14 +4,96 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0b0d" />
     <meta
       name="description"
       content="iPhone Evolution — experiência visual original pela evolução de design do iPhone, geração a geração."
     />
+
+    <!--
+      Open Graph / Twitter Card: controla o preview que aparece ao
+      compartilhar o link (WhatsApp, X, LinkedIn etc.). `og:url` e o
+      `og:image` abaixo usam caminho relativo por enquanto — o projeto
+      ainda não tem um domínio de produção definido. Ao publicar, troque
+      `og:image` por uma URL absoluta (ex.:
+      "https://seu-dominio.com/og-image.png") e adicione um
+      `<link rel="canonical" href="https://seu-dominio.com/" />" logo
+      abaixo — sem um domínio real, um valor fixo aqui ficaria errado.
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="iPhone Evolution" />
+    <meta property="og:title" content="iPhone Evolution — uma evolução em 3D" />
+    <meta
+      property="og:description"
+      content="Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="iPhone Evolution — uma evolução em 3D" />
+    <meta
+      name="twitter:description"
+      content="Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+
     <title>iPhone Evolution</title>
+
+    <style>
+      /*
+        Indicador de carregamento inicial: sem code-splitting por rota
+        (é uma página única), o bundle inteiro (React + Three.js + GSAP)
+        precisa baixar e executar antes do primeiro paint do React — em
+        conexão lenta isso pode levar alguns segundos com a tela em
+        branco. Este spinner é CSS puro, inline (não depende do bundle
+        carregar) e é removido pelo próprio React assim que `#root` é
+        preenchido (ver main.jsx).
+      */
+      #initial-loader {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #0b0b0d;
+        z-index: 9999;
+      }
+
+      #initial-loader__spinner {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid rgba(216, 178, 107, 0.25);
+        border-top-color: #d8b26b;
+        animation: initial-loader-spin 0.8s linear infinite;
+      }
+
+      @keyframes initial-loader-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #initial-loader__spinner {
+          animation: none;
+        }
+      }
+    </style>
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": "iPhone Evolution",
+        "description": "Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll. Projeto independente — não afiliado, endossado ou patrocinado pela Apple Inc.",
+        "inLanguage": "pt-BR"
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="initial-loader" aria-hidden="true"><span id="initial-loader__spinner"></span></div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

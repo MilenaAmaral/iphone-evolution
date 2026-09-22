@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { devices } from '../../data/devices'
 import PhoneViewer from '../phone/PhoneViewer'
+import HighlightList from '../shared/HighlightList'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useInView } from '../../hooks/useInView'
 import './CurrentSection.css'
@@ -30,13 +31,19 @@ function CurrentSection() {
   useScrollReveal(containerRef)
 
   return (
-    <section className="current-section" id="atualidade" ref={containerRef}>
+    <section className="current-section section-shell" id="atualidade" ref={containerRef}>
       <div className="current-section__grid">
         <div className="current-section__viewer" data-reveal ref={viewerRef}>
           {/* Mesmo motivo do Canvas condicional em OriginSection.jsx: só
               monta o visualizador 3D quando o capítulo está perto de
               entrar na tela. */}
-          {viewerInView && <PhoneViewer modelPath={current.modelPath} scale={current.modelScale} />}
+          {viewerInView && (
+            <PhoneViewer
+              modelPath={current.modelPath}
+              scale={current.modelScale}
+              label={`Modelo 3D do ${current.name}, a geração mais recente desta linha do tempo`}
+            />
+          )}
         </div>
 
         <div className="current-section__copy">
@@ -51,11 +58,9 @@ function CurrentSection() {
             até aqui.
           </p>
 
-          <ul className="current-section__highlights" data-reveal>
-            {current.highlights.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
+          <div data-reveal>
+            <HighlightList items={current.highlights} />
+          </div>
 
           <dl className="current-section__specs" data-reveal>
             {SPEC_ROWS.map((row) => (

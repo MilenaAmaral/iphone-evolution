@@ -1,6 +1,7 @@
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import { prefersReducedMotion } from '../utils/motionPreference'
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
@@ -116,7 +117,10 @@ export function scrollToSegment({ scrollTrigger, segments, index, onComplete }) 
   const targetY = scrollTrigger.start + targetProgress * (scrollTrigger.end - scrollTrigger.start)
 
   gsap.to(window, {
-    duration: 1,
+    // Com "reduzir movimento" ativo, o salto pra geração escolhida na
+    // Timeline é praticamente instantâneo em vez de uma rolagem suave de
+    // 1s — o destino é o mesmo, só sem o deslocamento visual prolongado.
+    duration: prefersReducedMotion() ? 0.05 : 1,
     ease: 'power2.inOut',
     scrollTo: { y: targetY, autoKill: true },
     onComplete,

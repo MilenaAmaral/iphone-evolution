@@ -1,9 +1,10 @@
 // generate-sample-glb.mjs
 //
 // Gera um .glb MÍNIMO e válido, só para ter um arquivo real de teste do
-// pipeline de carregamento GLTF (useGLTF/Suspense) enquanto os modelos
-// definitivos de cada iPhone não existem (isso é a Fase 0 do roadmap do
-// projeto — retopologia/LOD dos modelos fotogramétricos reais).
+// pipeline de carregamento GLTF (useGLTF/Suspense) — usado só em
+// desenvolvimento (ver public/models/dev/), nunca ligado a um aparelho
+// real do dataset. Os modelos de verdade (um por geração, data-driven a
+// partir de devices.js) são gerados por ../generate-device-models.mjs.
 //
 // Não é arte final nem tenta parecer um iPhone específico: é só uma malha
 // simples (corpo + "tela") suficiente para confirmar que PhoneModel
@@ -11,9 +12,12 @@
 //   node scripts/dev-assets/generate-sample-glb.mjs
 
 import { Document, NodeIO } from '@gltf-transform/core'
+import { ALL_EXTENSIONS } from '@gltf-transform/extensions'
+import { meshopt } from '@gltf-transform/functions'
+import { MeshoptEncoder } from 'meshoptimizer'
+import { makeBox } from '../gltfPrimitives.mjs'
 
 const doc = new Document()
-const buffer = doc.createBuffer()
 
 const material = doc
   .createMaterial('corpo')
@@ -27,57 +31,27 @@ const screenMaterial = doc
   .setMetallicFactor(0.1)
   .setRoughnessFactor(0.15)
 
-function makeBox(name, [w, h, d], mat) {
-  const hw = w / 2
-  const hh = h / 2
-  const hd = d / 2
-
-  // 8 vértices de uma caixa simples.
-  // prettier-ignore
-  const positions = new Float32Array([
-    -hw,-hh, hd,  hw,-hh, hd,  hw, hh, hd,  -hw, hh, hd, // frente
-    -hw,-hh,-hd,  -hw, hh,-hd,  hw, hh,-hd,  hw,-hh,-hd, // trás
-  ])
-  // prettier-ignore
-  const indices = new Uint16Array([
-    0,1,2, 0,2,3,       // frente
-    4,5,6, 4,6,7,       // trás
-    3,2,6, 3,6,5,       // topo
-    0,7,1, 0,4,7,       // base
-    1,7,6, 1,6,2,       // direita
-    4,0,3, 4,3,5,       // esquerda
-  ])
-
-  const positionAccessor = doc
-    .createAccessor()
-    .setType('VEC3')
-    .setArray(positions)
-    .setBuffer(buffer)
-
-  const indexAccessor = doc
-    .createAccessor()
-    .setArray(indices)
-    .setBuffer(buffer)
-
-  const prim = doc
-    .createPrimitive()
-    .setAttribute('POSITION', positionAccessor)
-    .setIndices(indexAccessor)
-    .setMaterial(mat)
-
-  const mesh = doc.createMesh(name).addPrimitive(prim)
-  return doc.createNode(name).setMesh(mesh)
-}
-
-const body = makeBox('corpo', [0.9, 1.9, 0.09], material)
-const screen = makeBox('tela', [0.8, 1.76, 0.01], screenMaterial)
-screen.setTranslation([0, 0, 0.052])
+const body = makeBox(doc, 'corpo', [0.9, 1.9, 0.09], material)
+const screen = makeBox(doc, 'tela', [0.8, 1.76, 0.01], screenMaterial, { position: [0, 0, 0.052] })
 
 const scene = doc.createScene('cena')
 scene.addChild(body)
 scene.addChild(screen)
 
-const io = new NodeIO()
+// Compressão Meshopt (EXT_meshopt_compression) — o mesmo formato que
+// PhoneModel.jsx já sabe descomprimir sem precisar de nenhum CDN externo
+// (ver o comentário sobre USE_MESHOPT em src/three/gltfCache.js). Este
+// arquivo de exemplo é pequeno demais pra a compressão fazer diferença
+// visível no tamanho, mas o pipeline aqui é o mesmo que os modelos reais
+// (Fase 0 do roadmap) vão usar — a ideia é já nascer certo, em vez de
+// precisar lembrar de adicionar compressão depois, com dezenas de .glb
+// reais já gerados sem ela.
+await MeshoptEncoder.ready
+await doc.transform(meshopt({ encoder: MeshoptEncoder }))
+
+const io = new NodeIO().registerExtensions(ALL_EXTENSIONS).registerDependencies({
+  'meshopt.encoder': MeshoptEncoder,
+})
 await io.write('public/models/dev/sample-phone.glb', doc)
 
-console.log('Gerado: public/models/dev/sample-phone.glb')
+console.log('Gerado: public/models/dev/sample-phone.glb (com compressão Meshopt)')

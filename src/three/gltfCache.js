@@ -41,13 +41,23 @@ import { disposeObject3D } from './disposeObject3D'
 // decoder, servida junto com o próprio app.
 const USE_DRACO = false
 
+// Meshopt, ao contrário do Draco, NÃO depende de nenhum CDN externo — o
+// decoder (`MeshoptDecoder`, de `three-stdlib`) já vem embutido no bundle
+// do próprio app. Por isso ele fica ligado por padrão (explicitado aqui
+// em vez de depender do valor padrão implícito de `useGLTF`, pra deixar
+// claro que é uma escolha deliberada, não um esquecimento). O lado que
+// GERA os .glb precisa aplicar a compressão Meshopt na exportação pra
+// isso ter efeito de verdade — ver
+// scripts/dev-assets/generate-sample-glb.mjs, que já faz isso.
+const USE_MESHOPT = true
+
 function cacheKey(path) {
   return [GLTFLoader, path]
 }
 
 export function preloadModel(path) {
   if (!path) return
-  useGLTF.preload(path, USE_DRACO)
+  useGLTF.preload(path, USE_DRACO, USE_MESHOPT)
 }
 
 export function isModelCached(path) {
@@ -71,4 +81,4 @@ export function releaseModel(path) {
   clearSuspendCache(cacheKey(path))
 }
 
-export { USE_DRACO }
+export { USE_DRACO, USE_MESHOPT }

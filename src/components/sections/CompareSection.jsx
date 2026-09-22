@@ -72,14 +72,16 @@ const COMPARISON_ROWS = [
  */
 function CompareSection() {
   const sectionRef = useRef(null)
-  const viewerInView = useInView(sectionRef, { rootMargin: '20% 0px' })
+  // Usa o rootMargin padrão de useInView (ver o comentário lá sobre por
+  // que 15% reduz a chance de dois <Canvas> ficarem ativos ao mesmo tempo).
+  const viewerInView = useInView(sectionRef)
   useScrollReveal(sectionRef)
 
   const { value, trackRef, trackHandlers, handleKeyDown } = useDragSlider({ initial: 50, min: 12, max: 88 })
   const roundedValue = Math.round(value)
 
   return (
-    <section className="compare-section" id="comparar" ref={sectionRef}>
+    <section className="compare-section section-shell" id="comparar" ref={sectionRef}>
       <header className="compare-section__intro">
         <p className="section-kicker" data-reveal>
           Capítulo 09 — Veja a evolução
@@ -99,7 +101,12 @@ function CompareSection() {
             {OLDER.name} · {OLDER.year}
           </span>
           {viewerInView && (
-            <StaticPhoneViewer modelPath={OLDER.modelPath} scale={OLDER.modelScale} rotation={[0, -0.32, 0]} />
+            <StaticPhoneViewer
+              modelPath={OLDER.modelPath}
+              scale={OLDER.modelScale}
+              rotation={[0, -0.32, 0]}
+              label={`Modelo 3D do ${OLDER.name} (${OLDER.year})`}
+            />
           )}
         </div>
 
@@ -108,7 +115,12 @@ function CompareSection() {
             {NEWER.name} · {NEWER.year}
           </span>
           {viewerInView && (
-            <StaticPhoneViewer modelPath={NEWER.modelPath} scale={NEWER.modelScale} rotation={[0, 0.32, 0]} />
+            <StaticPhoneViewer
+              modelPath={NEWER.modelPath}
+              scale={NEWER.modelScale}
+              rotation={[0, 0.32, 0]}
+              label={`Modelo 3D do ${NEWER.name} (${NEWER.year})`}
+            />
           )}
         </div>
 

@@ -3,6 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { devices } from '../../data/devices'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import { prefersReducedMotion } from '../../utils/motionPreference'
 import './PerformanceSection.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -37,6 +38,13 @@ function PerformanceSection() {
     if (!container || !line) return undefined
 
     const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) {
+        // A linha "se desenhando" junto com o scroll é puramente
+        // decorativa — com movimento reduzido, ela já aparece completa.
+        gsap.set(line, { scaleY: 1 })
+        return
+      }
+
       gsap.fromTo(
         line,
         { scaleY: 0 },
@@ -57,7 +65,7 @@ function PerformanceSection() {
   }, [])
 
   return (
-    <section className="performance-section" id="performance" ref={containerRef}>
+    <section className="performance-section section-shell" id="performance" ref={containerRef}>
       <header className="performance-section__intro">
         <p className="section-kicker" data-reveal>
           Capítulo 06 — Performance

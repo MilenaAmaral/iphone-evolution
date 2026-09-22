@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react'
+import PropTypes from 'prop-types'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import PhoneModel from './PhoneModel'
+import { devicePropType } from '../../data/devicePropType'
 
 /**
  * ScrollControlledPhone — envolve UM <PhoneModel> de UM aparelho fixo
@@ -99,6 +101,14 @@ function ScrollControlledPhone({ device, deviceIndex, segments, progressRef, bas
       <PhoneModel modelPath={device.modelPath} />
     </group>
   )
+}
+
+ScrollControlledPhone.propTypes = {
+  device: devicePropType.isRequired,
+  deviceIndex: PropTypes.number.isRequired,
+  segments: PropTypes.number.isRequired,
+  progressRef: PropTypes.shape({ current: PropTypes.object }).isRequired,
+  baseRotationSpeed: PropTypes.number,
 }
 
 export default ScrollControlledPhone

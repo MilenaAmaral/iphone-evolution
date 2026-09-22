@@ -15,9 +15,18 @@ import { devices } from '../data/devices'
  * aqui. Isso fica em refs dentro dos componentes de cena, lido por
  * useFrame. Este store guarda apenas estado discreto, que muda por ação
  * do usuário (clique na timeline, por exemplo).
+ *
+ * `devices` NÃO faz parte do estado exposto por este store — é um array
+ * estático (definido uma vez em data/devices.js, nunca modificado em
+ * runtime), então todo componente que precisa dele importa diretamente de
+ * lá (`import { devices } from '../../data/devices'`), a mesma fonte que
+ * este arquivo já usa internamente pra calcular `activeDevice`. Antes
+ * dessa limpeza, `devices` também vivia aqui como conveniência, e alguns
+ * componentes liam por aqui enquanto outros importavam direto — duas
+ * formas de acessar o mesmo dado, sem motivo (ver auditoria de
+ * "gerenciamento de estado").
  */
 export const useExperienceStore = create((set) => ({
-  devices,
   activeIndex: 0,
   activeDevice: devices[0],
 
@@ -28,9 +37,9 @@ export const useExperienceStore = create((set) => ({
     }),
 
   setActiveDeviceId: (id) =>
-    set((state) => {
-      const index = state.devices.findIndex((device) => device.id === id)
-      if (index === -1) return state
-      return { activeIndex: index, activeDevice: state.devices[index] }
+    set(() => {
+      const index = devices.findIndex((device) => device.id === id)
+      if (index === -1) return {}
+      return { activeIndex: index, activeDevice: devices[index] }
     }),
 }))

@@ -1,8 +1,4 @@
-.design-section {
-  position: relative;
-  z-index: 1;
-  padding: var(--space-section) clamp(20px, 5vw, 64px);
-}
+/* position/z-index/padding compartilhados: ver .section-shell em index.css */
 
 .design-section__intro {
   max-width: 40rem;

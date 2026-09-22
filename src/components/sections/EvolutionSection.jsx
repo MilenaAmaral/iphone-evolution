@@ -1,6 +1,7 @@
 import { Suspense, useRef } from 'react'
 import { Canvas } from '@react-three/fiber'
 import { ContactShadows } from '@react-three/drei'
+import { devices } from '../../data/devices'
 import Timeline from '../timeline/Timeline'
 import PhoneInfo from '../phone/PhoneInfo'
 import SceneErrorBoundary from '../phone/SceneErrorBoundary'
@@ -74,7 +75,6 @@ function EvolutionSectionContent() {
   const titleRef = useRef(null)
   const panelRef = useRef(null)
 
-  const devices = useExperienceStore((state) => state.devices)
   const activeIndex = useExperienceStore((state) => state.activeIndex)
   const activeDevice = useExperienceStore((state) => state.activeDevice)
   const nextDevice = devices[activeIndex + 1]
@@ -128,7 +128,11 @@ function EvolutionSectionContent() {
           <p>Role para acompanhar cada geração, do 3G ao modelo mais recente.</p>
         </div>
 
-        <div className="evolution-section__viewer">
+        <div
+          className="evolution-section__viewer"
+          role="img"
+          aria-label={`Modelo 3D do ${activeDevice.name}, lançado em ${activeDevice.year}`}
+        >
           <Canvas
             shadows
             dpr={[1, 2]}
@@ -138,7 +142,7 @@ function EvolutionSectionContent() {
           >
             <SceneLighting />
 
-            <SceneErrorBoundary>
+            <SceneErrorBoundary modelPath={[activeDevice.modelPath, nextDevice?.modelPath]}>
               {/* Dois aparelhos montados ao mesmo tempo: o que está
                   saindo de cena (activeDevice) e o que está entrando
                   (nextDevice), conforme o usuário rola dentro do segmento

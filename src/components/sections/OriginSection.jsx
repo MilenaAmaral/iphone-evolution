@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { devices } from '../../data/devices'
 import PhoneViewer from '../phone/PhoneViewer'
+import HighlightList from '../shared/HighlightList'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useInView } from '../../hooks/useInView'
 import './OriginSection.css'
@@ -33,7 +34,7 @@ function OriginSection() {
   useScrollReveal(containerRef)
 
   return (
-    <section className="origin-section" id="origem" ref={containerRef}>
+    <section className="origin-section section-shell" id="origem" ref={containerRef}>
       <span className="origin-section__year-mark" aria-hidden="true">
         {origin.year}
       </span>
@@ -51,11 +52,9 @@ function OriginSection() {
             que vem a seguir nesta experiência parte daqui.
           </p>
 
-          <ul className="origin-section__highlights" data-reveal>
-            {origin.highlights.map((point) => (
-              <li key={point}>{point}</li>
-            ))}
-          </ul>
+          <div data-reveal>
+            <HighlightList items={origin.highlights} />
+          </div>
 
           <dl className="origin-section__specs" data-reveal>
             {SPEC_PILLS.map((pill) => (
@@ -71,7 +70,13 @@ function OriginSection() {
           {/* Canvas WebGL só monta quando a seção fica perto da viewport
               (ver useInView) — evita ter dois/três <Canvas> rodando ao
               mesmo tempo desde o carregamento da página. */}
-          {viewerInView && <PhoneViewer modelPath={origin.modelPath} scale={origin.modelScale} />}
+          {viewerInView && (
+            <PhoneViewer
+              modelPath={origin.modelPath}
+              scale={origin.modelScale}
+              label={`Modelo 3D do ${origin.name}, lançado em ${origin.year}`}
+            />
+          )}
         </div>
       </div>
     </section>

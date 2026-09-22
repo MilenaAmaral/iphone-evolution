@@ -31,6 +31,18 @@
   color-scheme: dark;
 }
 
+/**
+ * Breakpoints padrão do projeto — 640px (celular/coluna única) e 900px
+ * (tablet/onde um grid de duas colunas passa a caber). CSS puro não deixa
+ * usar custom properties DENTRO da condição de um `@media` (só nos
+ * valores declarados por dentro dele), então isto aqui é documentação,
+ * não uma variável de fato — mas todo `@media (max-width: ...)` do
+ * projeto usa um destes dois valores, nunca um terceiro ad hoc. Se um
+ * dia isso passar a incomodar, a solução real é adicionar o plugin
+ * PostCSS `postcss-custom-media`, que permite `@custom-media --mobile
+ * (max-width: 640px)` reutilizável de verdade.
+ */
+
 * {
   box-sizing: border-box;
 }
@@ -70,6 +82,24 @@ button {
 
 a {
   color: inherit;
+}
+
+/**
+ * .section-shell — o "invólucro" repetido em toda seção de storytelling
+ * (ORIGEM, GRANDES MUDANÇAS, CÂMERAS, PERFORMANCE, DESIGN, ATUALIDADE,
+ * VEJA A EVOLUÇÃO): position/z-index pra ficar acima do Canvas 3D fixo, e
+ * o mesmo espaçamento vertical/horizontal generoso entre "capítulos".
+ * Antes desta extração, essas mesmas três linhas apareciam copiadas em 7
+ * arquivos *.css diferentes — qualquer ajuste no ritmo das seções exigia
+ * editar cada um manualmente. Uma seção com uma necessidade própria (ex.:
+ * `overflow: clip` em OriginSection, pro numeral gigante de fundo não
+ * vazar) mantém isso no próprio arquivo, combinando as duas classes no
+ * elemento (`className="origin-section section-shell"`).
+ */
+.section-shell {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-section) clamp(20px, 5vw, 64px);
 }
 
 /**

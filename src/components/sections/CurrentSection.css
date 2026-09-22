@@ -1,8 +1,4 @@
-.current-section {
-  position: relative;
-  z-index: 1;
-  padding: var(--space-section) clamp(20px, 5vw, 64px);
-}
+/* position/z-index/padding compartilhados: ver .section-shell em index.css */
 
 .current-section__grid {
   display: grid;
@@ -21,33 +17,7 @@
   max-width: 34rem;
 }
 
-.current-section__highlights {
-  list-style: none;
-  margin: 32px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.current-section__highlights li {
-  position: relative;
-  padding-left: 22px;
-  color: var(--color-text-strong);
-  font-size: 15px;
-  line-height: 1.55;
-}
-
-.current-section__highlights li::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 8px;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--color-accent);
-}
+/* Lista de destaques: ver .highlight-list em HighlightList.css (compartilhado com OriginSection) */
 
 .current-section__specs {
   display: grid;
@@ -79,7 +49,7 @@
   line-height: 1.4;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 900px) {
   .current-section__grid {
     grid-template-columns: 1fr;
   }

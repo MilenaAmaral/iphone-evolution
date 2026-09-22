@@ -25,7 +25,7 @@ function BigChangesSection() {
   useScrollReveal(containerRef, { selector: '.milestone', y: 40, start: 'top 85%' })
 
   return (
-    <section className="big-changes-section" id="mudancas" ref={containerRef}>
+    <section className="big-changes-section section-shell" id="mudancas" ref={containerRef}>
       <header className="big-changes-section__intro">
         <p className="section-kicker" data-reveal>Capítulo 04 — Grandes mudanças</p>
         <h2 className="section-heading" data-reveal>O design nunca parou.</h2>

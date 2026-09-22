@@ -1,8 +1,4 @@
-.big-changes-section {
-  position: relative;
-  z-index: 1;
-  padding: var(--space-section) clamp(20px, 5vw, 64px);
-}
+/* position/z-index/padding compartilhados: ver .section-shell em index.css */
 
 .big-changes-section__intro {
   max-width: 36rem;
@@ -57,7 +53,7 @@
   line-height: 1.6;
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
   .milestone {
     grid-template-columns: 1fr;
     gap: 8px;

@@ -12,23 +12,30 @@
  * Convenções:
  * - `generation`: posição cronológica do aparelho NESTA timeline (1 a 19).
  *   Não é um índice oficial da Apple — é só a ordem de exibição aqui.
- * - `modelPath`: caminho do modelo 3D otimizado (.glb). Fica `null` em
- *   todos os itens porque nenhum modelo 3D real foi produzido ainda — isso
- *   é trabalho da Fase 0 do pipeline de assets (ver doc de arquitetura).
- *   Enquanto for `null`, `PhoneModel` renderiza um placeholder geométrico
- *   (nunca uma imagem 2D). Convenção de nome de arquivo prevista pra
- *   quando os .glb de verdade existirem: um arquivo por geração, nomeado
- *   pelo `id` do aparelho — `/models/<id>.glb` (ex.: `/models/iphone-3g.glb`,
- *   `/models/iphone-18-pro.glb`). A função `getModelPath(id)` abaixo monta
- *   esse caminho; ligar um modelo real é só trocar `modelPath: null` por
- *   `modelPath: getModelPath('iphone-3g')` no item correspondente — nenhum
- *   componente precisa mudar (PhoneModel/gltfCache só leem essa string).
+ * - `modelPath`: caminho do modelo 3D (.glb) de cada geração —
+ *   `/models/<id>.glb` (ex.: `/models/iphone-3g.glb`), montado pela função
+ *   `getModelPath(id)` abaixo. Hoje isso aponta pros modelos gerados por
+ *   `scripts/generate-device-models.mjs`: corpos ESTILIZADOS e abstratos
+ *   (nunca uma reprodução do design real da Apple, nem uma imagem 2D) cujas
+ *   proporções, espessura, cor e número de "lentes" são todos DERIVADOS de
+ *   campos já verificados deste mesmo arquivo (ver o comentário no topo
+ *   daquele script pros detalhes) — nunca inventados. Trocar por modelos
+ *   definitivos (feitos por um artista 3D, por fotogrametria real) no
+ *   futuro é só sobrescrever o `.glb` de mesmo nome — nenhum componente
+ *   precisa mudar (PhoneModel/gltfCache só leem essa string). Rodar
+ *   `node scripts/generate-device-models.mjs` de novo regenera todos os 19
+ *   a partir dos dados atuais (por exemplo, depois de editar uma cor ou
+ *   uma espessura aqui embaixo).
  * - `modelScale`: fator de escala aplicado por cima da animação de
  *   transição (ver ScrollControlledPhone), pra normalizar aparelhos cujo
  *   .glb exportado venha em proporções diferentes entre si (unidades de
  *   modelagem diferentes, aparelhos fisicamente maiores/menores etc.).
- *   `1` é neutro; ajustar por geração assim que o modelo real existir e
- *   puder ser comparado visualmente aos vizinhos.
+ *   Fica em `1` (neutro) em todos os itens porque os modelos gerados por
+ *   generate-device-models.mjs já nascem no tamanho relativo correto uns
+ *   aos outros (a própria geometria é escalada pelo tamanho real da tela —
+ *   ver o comentário de `modelPath` acima), sem precisar de ajuste aqui.
+ *   Só volta a ser necessário se um modelo definitivo (feito fora desse
+ *   script) vier numa unidade de modelagem diferente dos demais.
  * - Modelos "Plus/Pro/Max/Mini" foram deixados de fora para manter uma
  *   linha do tempo de uma geração por ano. A exceção é o ciclo 2026: a
  *   Apple não lançou uma variante "padrão" do iPhone 18 (ver highlight do
@@ -45,6 +52,12 @@
  *   pra adicionar/remover um aparelho de qualquer parte da experiência —
  *   Timeline, PhoneInfo, SpecsSection e a cena 3D só leem este array.
  */
+
+// Convenção de caminho pros .glb reais — ver nota sobre `modelPath` no
+// comentário do topo do arquivo. Precisa vir antes de `devices` porque é
+// chamada dentro do próprio array logo abaixo (senão dá erro de "temporal
+// dead zone": usar um `const` antes dele terminar de ser definido).
+export const getModelPath = (id) => `/models/${id}.glb`
 
 export const devices = [
   {
@@ -63,7 +76,7 @@ export const devices = [
       'Primeiro iPhone com suporte a redes 3G/UMTS e GPS',
       'Lançado junto com a App Store (iPhone OS 2.0)',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-3g'),
     modelScale: 1,
   },
   {
@@ -82,7 +95,7 @@ export const devices = [
       'Primeiro iPhone com gravação de vídeo',
       'Introduziu bússola digital e o Controle por Voz',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-3gs'),
     modelScale: 1,
   },
   {
@@ -101,7 +114,7 @@ export const devices = [
       'Primeiro iPhone com tela "Retina"',
       'Primeiro com câmera frontal (FaceTime) e giroscópio',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-4'),
     modelScale: 1,
   },
   {
@@ -120,7 +133,7 @@ export const devices = [
       'Introduziu a Siri',
       'Último iPhone com conector dock de 30 pinos',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-4s'),
     modelScale: 1,
   },
   {
@@ -139,7 +152,7 @@ export const devices = [
       'Introduziu o conector Lightning, substituindo o dock de 30 pinos',
       'Primeiro iPhone com LTE e nano-SIM',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-5'),
     modelScale: 1,
   },
   {
@@ -158,7 +171,7 @@ export const devices = [
       'Primeiro iPhone com Touch ID',
       'Primeiro processador de 64 bits do mercado mobile',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-5s'),
     modelScale: 1,
   },
   {
@@ -177,7 +190,7 @@ export const devices = [
       'Introduziu NFC e Apple Pay na linha padrão',
       'Adicionou barômetro',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-6'),
     modelScale: 1,
   },
   {
@@ -196,7 +209,7 @@ export const devices = [
       'Primeiro iPhone com gravação de vídeo em 4K',
       'Introduziu o 3D Touch',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-6s'),
     modelScale: 1,
   },
   {
@@ -215,7 +228,7 @@ export const devices = [
       'Primeiro iPhone oficialmente resistente à água e poeira (IP67)',
       'Removeu a entrada de fone de ouvido de 3,5 mm',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-7'),
     modelScale: 1,
   },
   {
@@ -233,7 +246,7 @@ export const devices = [
     highlights: [
       'Traseira de vidro viabilizou carregamento sem fio (Qi) pela primeira vez na linha padrão',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-8'),
     modelScale: 1,
   },
   {
@@ -252,7 +265,7 @@ export const devices = [
       'Primeiro iPhone com Face ID e sem botão Home',
       'Primeira tela OLED usada em um iPhone',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-x'),
     modelScale: 1,
   },
   {
@@ -271,7 +284,7 @@ export const devices = [
       'Introduziu o Modo Noturno',
       'Primeira câmera ultra grande angular dupla na linha padrão',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-11'),
     modelScale: 1,
   },
   {
@@ -290,7 +303,7 @@ export const devices = [
       'Primeiro iPhone padrão com tela OLED e conectividade 5G',
       'Introduziu o sistema magnético MagSafe',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-12'),
     modelScale: 1,
   },
   {
@@ -309,7 +322,7 @@ export const devices = [
       'Introduziu o Modo Cinema',
       'Estabilização de imagem por deslocamento de sensor chegou ao modelo padrão',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-13'),
     modelScale: 1,
   },
   {
@@ -328,7 +341,7 @@ export const devices = [
       'Primeiro iPhone padrão desde o 3G a reaproveitar o chip do ano anterior',
       'Introduziu SOS via satélite e detecção de colisão',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-14'),
     modelScale: 1,
   },
   {
@@ -347,7 +360,7 @@ export const devices = [
       'Primeiros iPhones com USB-C, substituindo o Lightning',
       'A Dynamic Island chegou ao modelo padrão',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-15'),
     modelScale: 1,
   },
   {
@@ -365,7 +378,7 @@ export const devices = [
     highlights: [
       'Primeiro iPhone padrão com o botão Action e o novo botão Camera Control',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-16'),
     modelScale: 1,
   },
   {
@@ -384,7 +397,7 @@ export const devices = [
       'Primeiro iPhone padrão com tela ProMotion de 120Hz',
       'Armazenamento inicial passou de 128GB para 256GB',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-17'),
     modelScale: 1,
   },
   {
@@ -403,13 +416,9 @@ export const devices = [
       'Neste ciclo a Apple não lançou uma variante "padrão": o iPhone 18 Pro é o modelo de entrada da linha 2026, ao lado do iPhone Duo dobrável',
       'Primeira câmera principal da linha com abertura variável',
     ],
-    modelPath: null,
+    modelPath: getModelPath('iphone-18-pro'),
     modelScale: 1,
   },
 ]
 
 export const getDeviceById = (id) => devices.find((device) => device.id === id)
-
-// Convenção de caminho pros .glb reais — ver nota sobre `modelPath` no
-// comentário do topo do arquivo.
-export const getModelPath = (id) => `/models/${id}.glb`

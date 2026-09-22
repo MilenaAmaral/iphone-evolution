@@ -1,14 +1,9 @@
-import { Suspense } from 'react'
-import { Canvas } from '@react-three/fiber'
-import { ContactShadows, OrbitControls } from '@react-three/drei'
-import PhoneModel from './PhoneModel'
-import SceneErrorBoundary from './SceneErrorBoundary'
-import SceneLighting from './SceneLighting'
-import ModelLoaderFallback from './ModelLoaderFallback'
-import './PhoneViewer.css'
+import PropTypes from 'prop-types'
+import PhoneScene from './PhoneScene'
 
 /**
- * PhoneViewer — visualizador 3D reutilizável de um aparelho.
+ * PhoneViewer — visualizador 3D reutilizável de um aparelho: auto-rotação
+ * contínua e controle de órbita pelo usuário (arrastar pra girar).
  *
  * Componente "burro": não lê nenhum estado global, só o que recebe por
  * props (`modelPath`, `rotation`, `scale`, `position`). Isso permite usá-lo
@@ -18,52 +13,35 @@ import './PhoneViewer.css'
  *
  * Preenche 100% do elemento pai (ver PhoneViewer.css) — o tamanho do
  * viewer é controlado por quem o usa, não por ele mesmo.
+ *
+ * A configuração do <Canvas> em si (luz, error boundary, sombra) vive em
+ * PhoneScene.jsx, compartilhada com <StaticPhoneViewer> — aqui só ficam os
+ * valores que tornam este viewer especificamente "o principal, interativo"
+ * (frameloop contínuo, câmera mais próxima, OrbitControls com auto-rotação).
  */
-function PhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0] }) {
+function PhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0], label }) {
   return (
-    <div className="phone-viewer">
-      <Canvas
-        shadows
-        dpr={[1, 2]}
-        camera={{ position: [1.6, 1, 3.2], fov: 32 }}
-        gl={{ antialias: true }}
-      >
-        {/* Iluminação + ambiente procedural compartilhados com a cena de
-            scroll (ver SceneLighting.jsx) — sem depender de HDRI externo. */}
-        <SceneLighting />
-
-        <SceneErrorBoundary>
-          <Suspense fallback={<ModelLoaderFallback />}>
-            <PhoneModel
-              modelPath={modelPath}
-              rotation={rotation}
-              scale={scale}
-              position={position}
-            />
-          </Suspense>
-        </SceneErrorBoundary>
-
-        {/* Sombra de contato: soft shadow barata, sem precisar de um chão
-            "de verdade" recebendo sombra — mantém a cena minimalista. */}
-        <ContactShadows position={[0, -1.05, 0]} opacity={0.45} blur={2.6} scale={8} far={2} />
-
-        {/* Câmera controlável: o usuário orbita (equivale a "rotacionar o
-            aparelho" visualmente) e a cena gira sozinha quando ele não
-            está interagindo. Pan desligado e zoom limitado para o
-            aparelho nunca sair de enquadramento. */}
-        <OrbitControls
-          makeDefault
-          enablePan={false}
-          minDistance={2}
-          maxDistance={5}
-          minPolarAngle={Math.PI / 4}
-          maxPolarAngle={Math.PI / 1.7}
-          autoRotate
-          autoRotateSpeed={0.6}
-        />
-      </Canvas>
-    </div>
+    <PhoneScene
+      modelPath={modelPath}
+      rotation={rotation}
+      scale={scale}
+      position={position}
+      frameloop="always"
+      camera={{ position: [1.6, 1, 3.2], fov: 32 }}
+      contactShadowsOpacity={0.45}
+      contactShadowsBlur={2.6}
+      orbitControls
+      label={label}
+    />
   )
+}
+
+PhoneViewer.propTypes = {
+  modelPath: PropTypes.string,
+  rotation: PropTypes.arrayOf(PropTypes.number),
+  scale: PropTypes.number,
+  position: PropTypes.arrayOf(PropTypes.number),
+  label: PropTypes.string,
 }
 
 export default PhoneViewer

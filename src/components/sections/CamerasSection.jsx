@@ -28,7 +28,7 @@ function CamerasSection() {
   )
 
   return (
-    <section className="cameras-section" id="cameras" ref={containerRef}>
+    <section className="cameras-section section-shell" id="cameras" ref={containerRef}>
       <header className="cameras-section__intro">
         <p className="section-kicker" data-reveal>
           Capítulo 05 — Câmeras

@@ -50,7 +50,7 @@ function DesignSection() {
   }, [])
 
   return (
-    <section className="design-section" id="design" ref={containerRef}>
+    <section className="design-section section-shell" id="design" ref={containerRef}>
       <header className="design-section__intro">
         <p className="section-kicker" data-reveal>
           Capítulo 07 — Design

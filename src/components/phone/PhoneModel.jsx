@@ -1,15 +1,19 @@
 import { useEffect, useMemo, useRef } from 'react'
+import PropTypes from 'prop-types'
 import { useGLTF, useAnimations, RoundedBox } from '@react-three/drei'
 import { SkeletonUtils } from 'three-stdlib'
-import { USE_DRACO } from '../../three/gltfCache'
+import { USE_DRACO, USE_MESHOPT } from '../../three/gltfCache'
 
 /**
  * PhoneModel — carrega e exibe o modelo 3D de UM aparelho.
  *
  * Com `modelPath`: carrega o .glb/.gltf de verdade via `useGLTF` (dentro
- * de <Suspense>, ver PhoneViewer). Sem `modelPath`: cai num placeholder
- * geométrico (não é imagem 2D — é malha 3D real), já que nem todo
- * aparelho tem modelo otimizado ainda (Fase 0 do pipeline de assets).
+ * de <Suspense>, ver PhoneViewer) — hoje é o caso dos 19 aparelhos do
+ * dataset, cada um com seu próprio .glb gerado (ver comentário de
+ * `modelPath` em devices.js). Sem `modelPath`: cai num placeholder
+ * geométrico (não é imagem 2D — é malha 3D real), mantido como fallback
+ * defensivo para um eventual aparelho futuro adicionado ao dataset antes
+ * de ter um modelo gerado para ele.
  */
 function PhoneModel({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0] }) {
   if (!modelPath) {
@@ -30,11 +34,11 @@ function PhoneModel({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0,
 
 function GltfPhoneModel({ modelPath, rotation, scale, position }) {
   const groupRef = useRef(null)
-  // `USE_DRACO` vem de gltfCache.js — mesma flag usada em
-  // `preloadModel`/`releaseModel`, pra carregar e pré-carregar sempre com
-  // a mesma configuração de loader (ver o comentário lá sobre por que
-  // Draco fica desligado por padrão).
-  const { scene, animations } = useGLTF(modelPath, USE_DRACO)
+  // `USE_DRACO`/`USE_MESHOPT` vêm de gltfCache.js — as mesmas flags usadas
+  // em `preloadModel`/`releaseModel`, pra carregar e pré-carregar sempre
+  // com a mesma configuração de loader (ver os comentários lá sobre por
+  // que Draco fica desligado e Meshopt ligado por padrão).
+  const { scene, animations } = useGLTF(modelPath, USE_DRACO, USE_MESHOPT)
 
   // `useGLTF` cacheia por URL e devolve A MESMA instância de `scene` para
   // qualquer componente que peça o mesmo `modelPath` — inclusive duas
@@ -120,6 +124,13 @@ function PlaceholderPhone({ rotation, scale, position }) {
       </RoundedBox>
     </group>
   )
+}
+
+PhoneModel.propTypes = {
+  modelPath: PropTypes.string,
+  rotation: PropTypes.arrayOf(PropTypes.number),
+  scale: PropTypes.number,
+  position: PropTypes.arrayOf(PropTypes.number),
 }
 
 export default PhoneModel

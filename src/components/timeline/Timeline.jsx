@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
+import { devices } from '../../data/devices'
 import { useExperienceStore } from '../../store/useExperienceStore'
 import { useGenerationNavigator } from '../../hooks/useScrollProgress'
+import { prefersReducedMotion } from '../../utils/motionPreference'
 import './Timeline.css'
 
 /**
@@ -20,7 +22,6 @@ import './Timeline.css'
  * sobre 3D — só "pede" a geração e o resto acontece sozinho, suave.
  */
 function Timeline() {
-  const devices = useExperienceStore((state) => state.devices)
   const activeIndex = useExperienceStore((state) => state.activeIndex)
   const navigateToGeneration = useGenerationNavigator()
   const trackRef = useRef(null)
@@ -51,7 +52,7 @@ function Timeline() {
     if (!track || !button) return
 
     const targetLeft = button.offsetLeft - (track.clientWidth - button.clientWidth) / 2
-    track.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' })
+    track.scrollTo({ left: Math.max(0, targetLeft), behavior: prefersReducedMotion() ? 'auto' : 'smooth' })
   }, [activeIndex])
 
   return (

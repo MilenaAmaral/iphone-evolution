@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
+import { prefersReducedMotion } from '../../utils/motionPreference'
 import './Hero.css'
 
 // Hero: abertura da experiência. Fica fora do Canvas 3D (o PhoneViewer
@@ -12,6 +13,17 @@ function Hero() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      if (prefersReducedMotion()) {
+        // Mantém o fade (a entrada não deixa de existir), mas sem o
+        // deslocamento vertical nem o escalonamento entre os três
+        // elementos — tudo aparece junto, quase instantâneo.
+        gsap.from([titleRef.current, subtitleRef.current, hintRef.current], {
+          opacity: 0,
+          duration: 0.3,
+        })
+        return
+      }
+
       gsap
         .timeline({ defaults: { ease: 'power3.out' } })
         .from(titleRef.current, { opacity: 0, y: 24, duration: 0.9 })
