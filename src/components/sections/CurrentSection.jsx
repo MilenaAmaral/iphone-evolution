@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { devices } from '../../data/devices'
-import PhoneViewer from '../phone/PhoneViewer'
+import IphoneViewer from '../phone/IphoneViewer'
 import HighlightList from '../shared/HighlightList'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useInView } from '../../hooks/useInView'
@@ -37,13 +37,7 @@ function CurrentSection() {
           {/* Mesmo motivo do Canvas condicional em OriginSection.jsx: só
               monta o visualizador 3D quando o capítulo está perto de
               entrar na tela. */}
-          {viewerInView && (
-            <PhoneViewer
-              modelPath={current.modelPath}
-              scale={current.modelScale}
-              label={`Modelo 3D do ${current.name}, a geração mais recente desta linha do tempo`}
-            />
-          )}
+          {viewerInView && <IphoneViewer />}
         </div>
 
         <div className="current-section__copy">

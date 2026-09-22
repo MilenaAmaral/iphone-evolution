@@ -1,18 +1,17 @@
 import { useRef } from 'react'
 import { devices } from '../../data/devices'
+import { realIphones } from '../../data/realIphones'
 import StaticPhoneViewer from '../phone/StaticPhoneViewer'
-import { useDragSlider } from '../../hooks/useDragSlider'
 import { useInView } from '../../hooks/useInView'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { getThicknessMm, getWeightGrams, formatSignedNumber } from '../../utils/deviceStats'
 import './CompareSection.css'
 
-// Os dois extremos da linha do tempo — mesma fonte de verdade usada em
-// OriginSection/CurrentSection (devices[0] e o último item do array),
-// nunca um par escolhido à parte. Se um novo aparelho for adicionado ao
-// dataset, esta comparação passa a usar o novo "mais recente" sozinha.
-const OLDER = devices[0]
-const NEWER = devices[devices.length - 1]
+// A comparação usa os dois modelos reais disponíveis nas extremidades da
+// coleção. Os dados técnicos continuam vindo de devices.js; realIphones.js
+// fornece os caminhos exatos dos GLBs adicionados em public/models.
+const OLDER = { ...devices[0], ...realIphones[0] }
+const NEWER = { ...devices[devices.length - 1], ...realIphones[realIphones.length - 1] }
 
 // Cada linha mostra o texto ORIGINAL de devices.js como valor (nunca um
 // resumo inventado). `getDelta`, quando existe, é só uma subtração entre
@@ -77,9 +76,6 @@ function CompareSection() {
   const viewerInView = useInView(sectionRef)
   useScrollReveal(sectionRef)
 
-  const { value, trackRef, trackHandlers, handleKeyDown } = useDragSlider({ initial: 50, min: 12, max: 88 })
-  const roundedValue = Math.round(value)
-
   return (
     <section className="compare-section section-shell" id="comparar" ref={sectionRef}>
       <header className="compare-section__intro">
@@ -90,13 +86,12 @@ function CompareSection() {
           {OLDER.name} contra {NEWER.name}.
         </h2>
         <p className="section-lede" data-reveal>
-          Arraste a divisória pra dar mais espaço a um lado ou ao outro — os
-          dois extremos desta linha do tempo, lado a lado.
+          Os dois extremos desta linha do tempo, lado a lado.
         </p>
       </header>
 
-      <div className="compare-stage" ref={trackRef} {...trackHandlers} data-reveal>
-        <div className="compare-stage__pane" style={{ flexBasis: `${value}%` }}>
+      <div className="compare-stage" data-reveal>
+        <div className="compare-stage__pane">
           <span className="compare-stage__tag compare-stage__tag--older" aria-hidden="true">
             {OLDER.name} · {OLDER.year}
           </span>
@@ -105,12 +100,15 @@ function CompareSection() {
               modelPath={OLDER.modelPath}
               scale={OLDER.modelScale}
               rotation={[0, -0.32, 0]}
+              fitModel
+              interactive
+              autoRotate
               label={`Modelo 3D do ${OLDER.name} (${OLDER.year})`}
             />
           )}
         </div>
 
-        <div className="compare-stage__pane" style={{ flexBasis: `${100 - value}%` }}>
+        <div className="compare-stage__pane">
           <span className="compare-stage__tag compare-stage__tag--newer" aria-hidden="true">
             {NEWER.name} · {NEWER.year}
           </span>
@@ -119,33 +117,20 @@ function CompareSection() {
               modelPath={NEWER.modelPath}
               scale={NEWER.modelScale}
               rotation={[0, 0.32, 0]}
+              fitModel
+              interactive
+              autoRotate
               label={`Modelo 3D do ${NEWER.name} (${NEWER.year})`}
             />
           )}
         </div>
 
-        <div className="compare-stage__divider" style={{ left: `${value}%` }} aria-hidden="true" />
-
-        <button
-          type="button"
-          className="compare-stage__handle"
-          style={{ left: `${value}%` }}
-          role="slider"
-          aria-orientation="horizontal"
-          aria-label={`Comparar ${OLDER.name} com ${NEWER.name}`}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={roundedValue}
-          onKeyDown={handleKeyDown}
-        >
-          <span aria-hidden="true">⟨ ⟩</span>
-        </button>
       </div>
 
       <dl
         className="compare-table"
         data-reveal
-        style={{ '--older-emphasis': value / 100, '--newer-emphasis': 1 - value / 100 }}
+        style={{ '--older-emphasis': 0.5, '--newer-emphasis': 0.5 }}
       >
         <div className="compare-table__row compare-table__row--head">
           <span />

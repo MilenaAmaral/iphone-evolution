@@ -79,7 +79,7 @@ export const devices = [
       'Design com traseira metálica e câmera única',
     ],
     image: getDeviceImage('iphone-original'),
-    modelPath: getModelPath('iphone-original'),
+    modelPath: '/models/iphone_1st_generation.glb',
     modelScale: 1,
   },
   {
@@ -100,7 +100,7 @@ export const devices = [
       'Lançado junto com a App Store (iPhone OS 2.0)',
     ],
     image: getDeviceImage('iphone-3g'),
-    modelPath: getModelPath('iphone-3g'),
+    modelPath: '/models/iphone-3G.glb',
     modelScale: 1,
   },
   {
@@ -142,7 +142,7 @@ export const devices = [
       'Primeiro com câmera frontal (FaceTime) e giroscópio',
     ],
     image: getDeviceImage('iphone-4'),
-    modelPath: getModelPath('iphone-4'),
+    modelPath: '/models/iphone_4.glb',
     modelScale: 1,
   },
   {
@@ -184,7 +184,7 @@ export const devices = [
       'Primeiro iPhone com LTE e nano-SIM',
     ],
     image: getDeviceImage('iphone-5'),
-    modelPath: getModelPath('iphone-5'),
+    modelPath: '/models/iphone_5.glb',
     modelScale: 1,
   },
   {
@@ -476,7 +476,7 @@ export const devices = [
       'Primeira câmera principal da linha com abertura variável',
     ],
     image: getDeviceImage('iphone-18-pro'),
-    modelPath: getModelPath('iphone-18-pro'),
+    modelPath: '/models/iphone-18-pro-max.glb',
     modelScale: 1,
   },
 ] 

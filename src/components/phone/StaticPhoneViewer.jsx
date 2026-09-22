@@ -22,17 +22,24 @@ import PhoneScene from './PhoneScene'
  * especificamente "estático" (frameloop sob demanda, câmera um pouco mais
  * afastada, sem OrbitControls).
  */
-function StaticPhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0], label }) {
+function StaticPhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, position = [0, 0, 0], fitModel = false, interactive = false, autoRotate = false, label }) {
   return (
     <PhoneScene
       modelPath={modelPath}
       rotation={rotation}
       scale={scale}
       position={position}
-      frameloop="demand"
-      camera={{ position: [1.7, 0.9, 3.4], fov: 30 }}
+      fitModel={fitModel}
+      frameloop={interactive || autoRotate ? 'always' : 'demand'}
+      camera={{ position: [1.35, 0.7, 3.2], fov: 30 }}
       contactShadowsOpacity={0.4}
       contactShadowsBlur={2.4}
+      orbitControls={interactive}
+      autoRotate={autoRotate}
+      autoRotateSpeed={0.45}
+      enableZoom
+      minDistance={2.2}
+      maxDistance={5}
       label={label}
     />
   )
@@ -43,6 +50,9 @@ StaticPhoneViewer.propTypes = {
   rotation: PropTypes.arrayOf(PropTypes.number),
   scale: PropTypes.number,
   position: PropTypes.arrayOf(PropTypes.number),
+  fitModel: PropTypes.bool,
+  interactive: PropTypes.bool,
+  autoRotate: PropTypes.bool,
   label: PropTypes.string,
 }
 

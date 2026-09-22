@@ -1,0 +1,23 @@
+.real-iphones__header { max-width: 44rem; margin: 0 auto 38px; text-align: center; }
+.real-iphones__header .section-kicker { justify-content: center; }
+.real-iphones__header .section-lede { margin-right: auto; margin-left: auto; }
+.real-iphones__timeline { display: flex; gap: 8px; max-width: 78rem; margin: 0 auto 28px; padding: 0 0 12px; overflow-x: auto; border-bottom: 1px solid var(--color-border); scrollbar-width: thin; }
+.real-iphones__year { flex: 0 0 auto; display: grid; gap: 4px; min-width: 108px; padding: 10px 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--color-text-muted); text-align: left; cursor: pointer; transition: color .25s ease, border-color .25s ease; }
+.real-iphones__year:hover, .real-iphones__year.is-active { color: var(--color-text-strong); border-bottom-color: var(--color-accent); }
+.real-iphones__year span { font-size: 12px; color: var(--color-accent); }
+.real-iphones__year strong { font-size: 14px; font-weight: 600; white-space: nowrap; }
+.real-iphones__layout { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr); align-items: center; gap: clamp(28px, 6vw, 90px); max-width: 78rem; margin: 0 auto; }
+.real-iphones__viewer { height: clamp(390px, 52vw, 610px); min-width: 0; }
+.real-iphones__info { max-width: 30rem; }
+.real-iphones__eyebrow { display: block; margin-bottom: 12px; color: var(--color-accent); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; }
+.real-iphones__info h3 { margin: 0 0 16px; font-family: var(--font-display); font-size: clamp(2.3rem, 5vw, 4.5rem); font-weight: 500; line-height: 1; }
+.real-iphones__description { max-width: 32rem; color: var(--color-text-muted); font-size: 1.05rem; line-height: 1.6; }
+.real-iphones__highlights { display: grid; gap: 8px; margin: 28px 0 0; padding: 0; list-style: none; }
+.real-iphones__highlights li { position: relative; padding-left: 18px; color: var(--color-text-strong); font-size: 14px; line-height: 1.45; }
+.real-iphones__highlights li::before { content: ''; position: absolute; top: .55em; left: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--color-accent); }
+.real-iphones__specs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin: 32px 0 0; }
+.real-iphones__specs div { padding: 12px; border: 1px solid var(--color-border); border-radius: 10px; background: rgba(19, 19, 22, .72); }
+.real-iphones__specs dt { margin-bottom: 5px; color: var(--color-accent); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.real-iphones__specs dd { margin: 0; color: var(--color-text-strong); font-size: 12px; line-height: 1.35; }
+@media (max-width: 900px) { .real-iphones__layout { grid-template-columns: 1fr; } .real-iphones__viewer { height: min(112vw, 520px); } .real-iphones__info { max-width: none; } }
+@media (max-width: 640px) { .real-iphones__specs { grid-template-columns: 1fr; } }

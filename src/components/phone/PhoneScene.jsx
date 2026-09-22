@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Canvas } from '@react-three/fiber'
 import { ContactShadows, OrbitControls } from '@react-three/drei'
 import PhoneModel from './PhoneModel'
+import IphoneModel from './IphoneModel'
 import SceneErrorBoundary from './SceneErrorBoundary'
 import SceneLighting from './SceneLighting'
 import ModelLoaderFallback from './ModelLoaderFallback'
@@ -40,6 +41,7 @@ function PhoneScene({
   maxPolarAngle = Math.PI / 1.7,
   shadows = true,
   dpr = [1, 2],
+  fitModel = false,
   label,
 }) {
   return (
@@ -65,7 +67,11 @@ function PhoneScene({
         {modelPath ? (
           <SceneErrorBoundary modelPath={modelPath}>
             <Suspense fallback={<ModelLoaderFallback />}>
-              <PhoneModel modelPath={modelPath} rotation={rotation} scale={scale} position={position} />
+              {fitModel ? (
+                <IphoneModel modelPath={modelPath} rotation={rotation} />
+              ) : (
+                <PhoneModel modelPath={modelPath} rotation={rotation} scale={scale} position={position} />
+              )}
             </Suspense>
           </SceneErrorBoundary>
         ) : (
@@ -123,6 +129,7 @@ PhoneScene.propTypes = {
   maxPolarAngle: PropTypes.number,
   shadows: PropTypes.bool,
   dpr: PropTypes.oneOfType([PropTypes.number, PropTypes.arrayOf(PropTypes.number)]),
+  fitModel: PropTypes.bool,
   label: PropTypes.string,
 }
 

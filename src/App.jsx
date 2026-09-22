@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import Hero from './components/sections/Hero'
+import RealIphonesSection from './components/sections/RealIphonesSection'
 import OriginSection from './components/sections/OriginSection'
 import EvolutionSection from './components/sections/EvolutionSection'
 import BigChangesSection from './components/sections/BigChangesSection'
@@ -72,6 +73,7 @@ function App() {
       <Navigation />
       <main className="app__content">
         <Hero />
+        <RealIphonesSection />
         <OriginSection />
         <EvolutionSection />
         <BigChangesSection />
