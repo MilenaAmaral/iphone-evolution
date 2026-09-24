@@ -17,6 +17,7 @@ function Product3D({ product, interactive = true }) {
     <div className="product-3d">
       <StaticPhoneViewer
         modelPath={product.modelPath}
+        fitModel
         interactive={interactive}
         autoRotate={!interactive}
         label={`${product.name}, ${product.year}`}

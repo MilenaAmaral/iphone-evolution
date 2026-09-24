@@ -14,6 +14,22 @@ const iphoneLatest = {
   type: '3d',
 }
 
+const appleWatchFirst = {
+  name: 'Apple Watch',
+  year: 2015,
+  modelPath: '/models/apple_watch_2015.glb',
+  category: 'Apple Watch',
+  type: '3d',
+}
+
+const appleWatchLatest = {
+  name: 'Apple Watch mais recente',
+  year: 2026,
+  modelPath: '/models/app_watch_2026.glb',
+  category: 'Apple Watch',
+  type: '3d',
+}
+
 const unavailableProduct = (category, name, year) => ({
   name,
   year,
@@ -27,8 +43,8 @@ export const appleProducts = [
   { category: 'iPhone', first: iphoneFirst, latest: iphoneLatest },
   {
     category: 'Apple Watch',
-    first: unavailableProduct('Apple Watch', 'Apple Watch', 2015),
-    latest: unavailableProduct('Apple Watch', 'Apple Watch mais recente', 2026),
+    first: appleWatchFirst,
+    latest: appleWatchLatest,
   },
   {
     category: 'iPad',

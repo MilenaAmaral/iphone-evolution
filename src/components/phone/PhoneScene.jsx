@@ -68,7 +68,7 @@ function PhoneScene({
           <SceneErrorBoundary modelPath={modelPath}>
             <Suspense fallback={<ModelLoaderFallback />}>
               {fitModel ? (
-                <IphoneModel modelPath={modelPath} rotation={rotation} />
+                <IphoneModel modelPath={modelPath} rotation={rotation} fitCamera />
               ) : (
                 <PhoneModel modelPath={modelPath} rotation={rotation} scale={scale} position={position} />
               )}
