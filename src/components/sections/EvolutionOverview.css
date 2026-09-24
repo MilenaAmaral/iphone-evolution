@@ -1,0 +1,14 @@
+.evolution-overview__header { max-width: 48rem; margin: 0 auto 68px; text-align: center; }
+.evolution-overview__header .section-kicker { justify-content: center; }
+.evolution-overview__header .section-lede { margin-right: auto; margin-left: auto; }
+.evolution-overview__track { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); max-width: 78rem; margin: 0 auto; }
+.evolution-overview__track::before { content: ''; position: absolute; top: 8px; right: 0; left: 0; height: 1px; background: linear-gradient(90deg, transparent, var(--color-accent), transparent); opacity: .7; }
+.evolution-overview__milestone { position: relative; padding: 34px 18px 0; border-left: 1px solid var(--color-border); }
+.evolution-overview__milestone:first-child { border-left: 0; }
+.evolution-overview__milestone::before { content: ''; position: absolute; top: 3px; left: 18px; width: 10px; height: 10px; border: 2px solid var(--color-accent); border-radius: 50%; background: var(--color-bg); }
+.evolution-overview__milestone span { color: var(--color-accent); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+.evolution-overview__milestone h3 { margin-top: 14px; font-family: var(--font-display); font-size: clamp(1.35rem, 2.5vw, 2rem); font-weight: 500; }
+.evolution-overview__milestone p { margin-top: 12px; max-width: 14rem; color: var(--color-text-muted); font-size: 13px; line-height: 1.55; }
+.evolution-overview__dimensions { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px 28px; margin-top: 72px; color: var(--color-text-muted); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+.evolution-overview__dimensions span::before { content: '↗'; margin-right: 8px; color: var(--color-accent); }
+@media (max-width: 640px) { .evolution-overview__header { margin-bottom: 48px; } .evolution-overview__track { grid-template-columns: 1fr; gap: 0; } .evolution-overview__track::before { top: 0; right: auto; bottom: 0; left: 5px; width: 1px; height: auto; background: linear-gradient(180deg, transparent, var(--color-accent), transparent); } .evolution-overview__milestone, .evolution-overview__milestone:first-child { min-height: 126px; padding: 0 0 28px 34px; border-left: 0; } .evolution-overview__milestone::before { top: 0; left: 0; } .evolution-overview__milestone p { max-width: 24rem; } }

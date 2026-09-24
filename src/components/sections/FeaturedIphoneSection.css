@@ -1,0 +1,9 @@
+.featured-iphone__layout { display: grid; grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr); align-items: center; gap: clamp(28px, 7vw, 110px); max-width: 78rem; margin: 0 auto; }
+.featured-iphone--right .featured-iphone__copy { order: 2; }
+.featured-iphone--right .featured-iphone__model { order: 1; }
+.featured-iphone__copy { max-width: 27rem; }
+.featured-iphone__meta { display: grid; gap: 5px; margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--color-border); }
+.featured-iphone__meta span { color: var(--color-accent); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.featured-iphone__meta strong { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.4rem); font-weight: 500; line-height: 1; }
+.featured-iphone__meta small { color: var(--color-text-muted); font-size: 12px; }
+@media (max-width: 900px) { .featured-iphone__layout { grid-template-columns: 1fr; gap: 20px; } .featured-iphone__copy, .featured-iphone--right .featured-iphone__copy { order: 1; max-width: none; } .featured-iphone__model, .featured-iphone--right .featured-iphone__model { order: 2; } }

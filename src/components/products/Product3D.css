@@ -1,0 +1,27 @@
+.product-3d {
+  min-width: 0;
+  height: clamp(360px, 46vw, 560px);
+}
+
+.product-3d .phone-viewer {
+  min-height: 100%;
+  border: 0;
+  border-radius: 18px;
+}
+
+.product-3d--pending {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 10px;
+  min-height: 280px;
+  padding: 30px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: radial-gradient(circle at 50% 40%, rgba(216, 178, 107, 0.12), transparent 52%), var(--color-surface);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.product-3d--pending strong { color: var(--color-text-strong); font-family: var(--font-display); font-size: 1.5rem; font-weight: 500; }
+.product-3d__pending-label { color: var(--color-accent); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }

@@ -3,7 +3,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import Hero from './components/sections/Hero'
-import RealIphonesSection from './components/sections/RealIphonesSection'
+import EvolutionOverview from './components/sections/EvolutionOverview'
+import FeaturedIphoneSection from './components/sections/FeaturedIphoneSection'
+import AppleProductsSection from './components/sections/AppleProductsSection'
+import { iphoneProduct } from './data/appleProducts'
 import CompareSection from './components/sections/CompareSection'
 import './App.css'
 
@@ -41,7 +44,23 @@ function App() {
       <Navigation />
       <main className="app__content">
         <Hero />
-        <RealIphonesSection />
+        <EvolutionOverview />
+        <FeaturedIphoneSection
+          id="primeiro-iphone"
+          eyebrow="O começo / 2007"
+          title="O primeiro gesto."
+          description="O iPhone original condensou telefone, música e internet em uma superfície que redefiniu a relação com a tecnologia."
+          product={iphoneProduct.first}
+        />
+        <FeaturedIphoneSection
+          id="ultimo-iphone"
+          eyebrow="O presente / 2026"
+          title="O sistema amadureceu."
+          description="O iPhone mais recente transforma câmera, desempenho e materiais em uma experiência cada vez mais integrada."
+          product={iphoneProduct.latest}
+          side="right"
+        />
+        <AppleProductsSection />
         <CompareSection />
       </main>
       <Footer />

@@ -1,7 +1,7 @@
 # iPhone Evolution
 
-Experiência web interativa (portfólio) mostrando a evolução de design do
-iPhone, geração a geração, com modelos 3D navegados por scroll. Projeto
+Experiência web interativa (portfólio) mostrando a evolução de produtos Apple,
+com foco no iPhone e em dois capítulos 3D principais. Projeto
 original — não afiliado, endossado ou patrocinado pela Apple Inc. Dados
 técnicos exibidos são fatos públicos; texto, direção de arte, código e
 composição visual são autorais.
@@ -20,22 +20,19 @@ npm run dev
 
 ```
 public/
-  models/            → um .glb por aparelho (54 no total — inclui
-                       variantes Plus/Pro/Max/mini/SE/Air), gerados por
-                       scripts/generate-device-models.mjs — ver "Estado
-                       atual" abaixo
+  models/            → modelos GLB existentes e registro de licenças
 
 src/
   main.jsx           → ponto de entrada; monta <App /> no #root
-  App.jsx             → layout raiz: posiciona o Canvas 3D (PhoneViewer)
-                       fixo atrás das seções DOM e as encaixa em ordem
+  App.jsx             → layout raiz: abertura, evolução resumida, capítulos
+                       do iPhone e Produtos Apple
   App.css / index.css → App.css só resolve o layout raiz; index.css tem o
                        reset global e os tokens de design (cores, fontes)
 
   data/
-    devices.js         → dataset canônico: um objeto por geração de iPhone
-                          (specs, cores, destaques históricos, caminho do
-                          modelo 3D). Fonte de verdade única dos dados.
+    devices.js         → especificações históricas do iPhone
+    iphoneCatalog.js   → catálogo visual cronológico do iPhone
+    appleProducts.js   → primeiro/último produto por categoria Apple
 
   store/
     useExperienceStore.js → estado global (Zustand): qual geração está
@@ -49,51 +46,32 @@ src/
       Footer.jsx/.css      → rodapé com crédito e nota de originalidade
 
     sections/
-      Hero.jsx/.css            → abertura da página, com animação GSAP de entrada
-      EvolutionSection.jsx/.css → seção onde o usuário navega pelas gerações
-                                  (Timeline + PhoneInfo), com reveal GSAP
-      SpecsSection.jsx/.css     → ficha técnica completa do aparelho ativo
+      Hero.jsx/.css                  → abertura da página, com CTA e animação GSAP
+      EvolutionOverview.jsx/.css     → evolução resumida do iPhone
+      FeaturedIphoneSection.jsx/.css → primeiro e último iPhone em 3D
+      AppleProductsSection.jsx/.css  → comparação entre categorias Apple
 
     timeline/
       Timeline.jsx/.css → trilha clicável com um marcador por geração;
                           lê/escreve o índice ativo no store
 
     phone/
-      PhoneViewer.jsx/.css → dono do <Canvas> do React Three Fiber; luz,
-                              ambiente e sombra de contato da cena
-      PhoneModel.jsx        → renderiza o modelo 3D do aparelho ativo (.glb
-                              gerado — ver "Estado atual" abaixo)
-      PhoneInfo.jsx/.css    → painel com ano, nome e destaques do aparelho ativo
+      PhoneViewer.jsx/.css → viewer interativo baseado em PhoneScene
+      Product3D.jsx/.css   → adaptador 3D reutilizável por categoria
+      PhoneModel.jsx        → renderiza um GLB com enquadramento automático
 ```
 
-## Estado atual (o que ainda é placeholder)
+## Estado atual
 
-- **Modelos 3D**: os 54 aparelhos do dataset (todas as gerações e
-  variantes Plus/Pro/Max/mini/SE/Air, de 2007 a 2026) têm cada um o seu
-  `.glb` real, gerado por
-  `scripts/generate-device-models.mjs` a partir de campos já verificados de
-  `devices.js` (tamanho ← tela real, espessura ← espessura real, cor ←
-  primeira cor de lançamento, nº de "lentes" ← contagem real de câmeras).
-  São modelos deliberadamente ESTILIZADOS e ABSTRATOS — um corpo
-  retangular simples, sem tentar copiar a curvatura, o acabamento ou o
-  desenho exato de nenhum iPhone real — não fotorrealistas, não feitos por
-  um artista 3D, não traçados de fotos da Apple. Isso ainda cumpre parte
-  da Fase 0 do roadmap do documento de arquitetura do projeto; o passo
-  seguinte (opcional, futuro) é trocar cada `.glb` por um modelo definitivo
-  (fotogrametria real ou trabalho de um artista 3D) sem precisar mudar
-  nenhum componente React, já que `PhoneModel.jsx` só lê o caminho do
-  arquivo (ver comentário de `modelPath` em `devices.js`).
-- **Navegação**: a troca de geração hoje é por clique na Timeline. O
-  scroll ainda não dirige a câmera 3D nem a troca automática de aparelho
-  — isso entra nas fases seguintes do roadmap (ScrollControls + GSAP
-  ScrollTrigger orquestrando câmera e conteúdo juntos).
-- **Dados**: todos os campos de `devices.js` são especificações técnicas
-  reais, verificadas contra as páginas oficiais de especificações da Apple
-  (ano, tela, processador, câmera, peso, espessura, cores, fatos
-  históricos). Nenhum valor foi inventado. Campos sem confirmação oficial
-  da Apple (abertura da câmera do iPhone original, 3G e 3GS; nome do chip
-  do iPhone original) dizem isso explicitamente no próprio texto, em vez
-  de estimar um número. O iPhone Duo (o lançamento mais recente do
-  catálogo) é o item com menor grau de confirmação cruzada — vale
-  reconferir contra a especificação oficial mais atual antes de tratar
-  qualquer detalhe dele como definitivo.
+- **Experiência**: Início, evolução resumida de 2007 à atualidade, primeiro
+  iPhone, último iPhone e Produtos Apple.
+- **3D**: o componente `Product3D` reutiliza `PhoneScene` e aceita qualquer
+  produto com `modelPath`. Os capítulos 3D só montam o Canvas quando entram
+  perto da viewport.
+- **Performance**: `Suspense`, `useInView`, cache do GLTFLoader, preload
+  controlado e descarte explícito de geometrias, materiais e texturas.
+- **Assets**: apenas modelos com arquivo local disponível são renderizados.
+  Apple Watch, iPad, MacBook e AirPods permanecem em estado pendente até que
+  exista uma fonte e uma licença de redistribuição verificáveis.
+- **Licenças**: consulte `public/models/MODEL_LICENSES.md` antes de publicar
+  ou adicionar novos modelos.

@@ -4,7 +4,8 @@ import './Navigation.css'
 // seções principais. Componente puro de DOM, sem estado próprio.
 const LINKS = [
   { href: '#topo', label: 'Início' },
-  { href: '#modelos-reais', label: 'Evolução' },
+  { href: '#evolucao', label: 'Evolução' },
+  { href: '#produtos-apple', label: 'Produtos Apple' },
   { href: '#comparar', label: 'Comparar' },
 ]
 

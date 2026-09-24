@@ -10,6 +10,7 @@ import './Hero.css'
 function Hero() {
   const titleWordsRef = useRef([])
   const subtitleRef = useRef(null)
+  const exploreRef = useRef(null)
   const hintRef = useRef(null)
   const titleWords = ['Uma', 'evolução', 'em', '3D.']
 
@@ -18,6 +19,7 @@ function Hero() {
       if (prefersReducedMotion()) {
         gsap.set(titleWordsRef.current, { opacity: 1, yPercent: 0 })
         gsap.set(subtitleRef.current, { opacity: 1, scaleX: 1 })
+        gsap.set(exploreRef.current, { opacity: 1, y: 0 })
         gsap.set(hintRef.current, { opacity: 1, y: 0 })
         return
       }
@@ -40,6 +42,7 @@ function Hero() {
           duration: 0.82,
           ease: 'power2.inOut',
         }, '-=0.34')
+        .from(exploreRef.current, { opacity: 0, y: 10, duration: 0.5 }, '-=0.12')
         .from(hintRef.current, { opacity: 0, y: 8, duration: 0.5 }, '-=0.12')
     })
 
@@ -67,6 +70,9 @@ function Hero() {
       <p ref={subtitleRef} className="hero__subtitle">
         Explore a transformação do iPhone através das gerações.
       </p>
+      <a ref={exploreRef} className="hero__explore" href="#evolucao">
+        Explorar evolução <span aria-hidden="true">↓</span>
+      </a>
       <span ref={hintRef} className="hero__scroll-hint" aria-hidden="true">
         role para explorar ↓
       </span>
