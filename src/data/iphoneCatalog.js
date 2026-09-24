@@ -1,5 +1,6 @@
 const ORIGINAL_MODEL = '/models/iphone_1st_generation.glb'
 const LATEST_MODEL = '/models/iphone-18-pro-max.glb'
+const DUO_MODEL = '/models/iphone-duo.glb'
 
 const definitions = [
   ['iphone-original', 'iPhone', 2007, 'A primeira geração combinou telefone, iPod e internet em uma nova experiência touchscreen.', 'Interface multitoque e Safari móvel'],
@@ -73,7 +74,8 @@ function getDeviceProfile(year) {
 export const iphoneCatalog = definitions.map(([id, name, year, description, innovation], index) => {
   const isOriginal = id === 'iphone-original'
   const isLatest3d = id === 'iphone-18-pro-max'
-  const is3d = isOriginal || isLatest3d
+  const isDuo = id === 'iphone-duo'
+  const is3d = isOriginal || isLatest3d || isDuo
   const profile = getDeviceProfile(year)
 
   return {
@@ -85,7 +87,7 @@ export const iphoneCatalog = definitions.map(([id, name, year, description, inno
     description,
     innovation,
     ...profile,
-    modelPath: isOriginal ? ORIGINAL_MODEL : isLatest3d ? LATEST_MODEL : undefined,
+    modelPath: isOriginal ? ORIGINAL_MODEL : isLatest3d ? LATEST_MODEL : isDuo ? DUO_MODEL : undefined,
     front: is3d ? undefined : getImagePath(id, 'front'),
     back: is3d ? undefined : getImagePath(id, 'back'),
     image: is3d ? undefined : getImagePath(id, 'front'),
