@@ -1078,7 +1078,7 @@ export const devices = [
       'Compartilha chip A20 Pro e câmera com abertura variável com o iPhone 18 Pro, mas com tela maior (6,9") e maior bateria da geração',
       'iPhone "tradicional" (não dobrável) mais pesado já lançado pela Apple até 2026, com 249 g',
     ],
-    modelPath: getModelPath('iphone-18-pro-max'),
+    modelPath: '/models/iphone_18_pro_max.glb',
     modelScale: 1,
   },
   {

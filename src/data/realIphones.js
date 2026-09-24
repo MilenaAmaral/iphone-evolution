@@ -47,7 +47,7 @@ export const realIphones = [
   },
   {
     id: 'iphone-18-pro-max-real',
-    modelPath: '/models/iphone-18-pro-max.glb',
+    modelPath: '/models/iphone_18_pro_max.glb',
     name: 'iPhone 18 Pro Max',
     year: iphone18.year,
     description: 'O modelo mais recente disponível nesta coleção, com foco em câmera, tela e desempenho.',
