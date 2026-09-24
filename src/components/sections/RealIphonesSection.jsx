@@ -1,25 +1,20 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'motion/react'
-import evolutionGenerations from '../../data/evolutionGenerations'
+import iphoneCatalog from '../../data/iphoneCatalog'
 import IphoneViewer from '../phone/IphoneViewer'
+import IphoneImageViewer from '../phone/IphoneImageViewer'
 import { useInView } from '../../hooks/useInView'
 import { prefersReducedMotion } from '../../utils/motionPreference'
 import './RealIphonesSection.css'
 
 const transition = { duration: 0.45, ease: [0.22, 1, 0.36, 1] }
-const ORIGINAL_MODEL = '/models/iphone_1st_generation.glb'
-const FINAL_MODEL = '/models/iphone-18-pro-max.glb'
-
 function RealIphonesSection() {
   const sectionRef = useRef(null)
   const timelineRef = useRef(null)
   const activeButtonRef = useRef(null)
   const viewerInView = useInView(sectionRef)
   const [activeIndex, setActiveIndex] = useState(0)
-  const activeGeneration = evolutionGenerations[activeIndex]
-  const isFinalGeneration = activeGeneration.year === 2026
-  const isModelGeneration = activeGeneration.year === 2007 || isFinalGeneration
-  const modelPath = isFinalGeneration ? FINAL_MODEL : ORIGINAL_MODEL
+  const activeGeneration = iphoneCatalog[activeIndex]
   const activeSpecs = [
     ['Tela', activeGeneration.display],
     ['Câmera', activeGeneration.camera],
@@ -45,13 +40,13 @@ function RealIphonesSection() {
   return (
     <section className="real-iphones section-shell" id="modelos-reais" ref={sectionRef}>
       <div className="real-iphones__header">
-        <p className="section-kicker">2007 — 2026</p>
+        <p className="section-kicker">2007 — agora</p>
         <h2 className="section-heading">A evolução, em mãos.</h2>
-        <p className="section-lede">Uma timeline de mudanças, conduzida por dois modelos: o começo e o agora.</p>
+        <p className="section-lede">Uma linha do tempo visual do design do iPhone, do primeiro toque ao formato mais recente.</p>
       </div>
 
       <div className="real-iphones__timeline" ref={timelineRef} aria-label="Selecionar geração do iPhone">
-        {evolutionGenerations.map((generation, index) => (
+        {iphoneCatalog.map((generation, index) => (
           <button
             key={generation.id}
             ref={index === activeIndex ? activeButtonRef : null}
@@ -68,14 +63,11 @@ function RealIphonesSection() {
 
       <div className="real-iphones__layout">
         <div className="real-iphones__viewer">
-          {viewerInView && isModelGeneration && (
-            <IphoneViewer key={modelPath} modelPath={modelPath} label={`Modelo 3D do ${isFinalGeneration ? 'iPhone 18 Pro Max' : 'iPhone original'}`} />
+          {viewerInView && activeGeneration.type === '3d' && (
+            <IphoneViewer key={activeGeneration.modelPath} modelPath={activeGeneration.modelPath} label={`Modelo 3D do ${activeGeneration.name}`} />
           )}
-          {!isModelGeneration && (
-            <div className="real-iphones__text-stage" aria-hidden="true">
-              <span>Uma geração em transformação</span>
-              <strong>{activeGeneration.year}</strong>
-            </div>
+          {viewerInView && activeGeneration.type === 'image' && (
+            <IphoneImageViewer key={activeGeneration.id} device={activeGeneration} />
           )}
         </div>
 

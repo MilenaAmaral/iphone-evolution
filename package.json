@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "check:models": "node scripts/check-models.mjs"
+    "check:models": "node scripts/check-models.mjs",
+    "generate:iphone-images": "node scripts/generate-iphone-image-assets.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.8",
