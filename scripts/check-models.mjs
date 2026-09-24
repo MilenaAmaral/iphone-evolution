@@ -22,7 +22,7 @@ function walk(dir) {
 const modelFiles = walk(rootDir)
 const modelNames = new Set(modelFiles.map((file) => path.basename(file, '.glb')))
 
-const activeModels = ['iphone_1st_generation', 'iphone-18-pro-max']
+const activeModels = ['iphone_1st_generation', 'iphone-duo', 'iphone-18-pro-max']
 const missing = activeModels.filter((id) => !modelNames.has(id))
 
 if (missing.length === 0) {

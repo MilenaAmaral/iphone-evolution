@@ -1,7 +1,7 @@
 # iPhone Evolution
 
 Experiência web interativa (portfólio) mostrando a evolução de design do
-iPhone, do modelo original de 2007 ao iPhone 18 Pro Max de 2026. Projeto
+iPhone, geração a geração, com modelos 3D navegados por scroll. Projeto
 original — não afiliado, endossado ou patrocinado pela Apple Inc. Dados
 técnicos exibidos são fatos públicos; texto, direção de arte, código e
 composição visual são autorais.
@@ -16,42 +16,26 @@ npm install
 npm run dev
 ```
 
-## Modelos 3D utilizados
-
-A interface utiliza somente dois modelos 3D reais:
-
-- `public/models/iphone_1st_generation.glb` — iPhone original, 2007
-- `public/models/iphone-18-pro-max.glb` — iPhone 18 Pro Max, 2026
-
-As gerações intermediárias aparecem exclusivamente como conteúdo textual na
-timeline. Outros arquivos `.glb` podem permanecer em `public/models`, mas não
-são importados, pré-carregados ou renderizados pela interface.
-
-Validação rápida:
-
-```bash
-npm run check:models
-```
-
-Esse script confirma se os dois modelos ativos da experiência existem na pasta pública.
-
 ## Estrutura do projeto
 
 ```
 public/
-  models/            → arquivos GLB preservados; somente o primeiro iPhone
-                       e o iPhone 18 Pro Max são usados pela interface
+  models/            → um .glb por aparelho (54 no total — inclui
+                       variantes Plus/Pro/Max/mini/SE/Air), gerados por
+                       scripts/generate-device-models.mjs — ver "Estado
+                       atual" abaixo
 
 src/
   main.jsx           → ponto de entrada; monta <App /> no #root
-  App.jsx             → layout raiz: abertura, timeline interativa e
-                       comparação final
+  App.jsx             → layout raiz: posiciona o Canvas 3D (PhoneViewer)
+                       fixo atrás das seções DOM e as encaixa em ordem
   App.css / index.css → App.css só resolve o layout raiz; index.css tem o
                        reset global e os tokens de design (cores, fontes)
 
   data/
-    devices.js         → especificações técnicas históricas verificadas
-    evolutionGenerations.js → dados estruturados da timeline de 2007 a 2026
+    devices.js         → dataset canônico: um objeto por geração de iPhone
+                          (specs, cores, destaques históricos, caminho do
+                          modelo 3D). Fonte de verdade única dos dados.
 
   store/
     useExperienceStore.js → estado global (Zustand): qual geração está
@@ -65,31 +49,51 @@ src/
       Footer.jsx/.css      → rodapé com crédito e nota de originalidade
 
     sections/
-      Hero.jsx/.css             → abertura da página
-      RealIphonesSection.jsx/.css → timeline textual, informações e viewer
-                   sob demanda dos dois extremos
-      CompareSection.jsx/.css   → comparação final entre 2007 e 2026
+      Hero.jsx/.css            → abertura da página, com animação GSAP de entrada
+      EvolutionSection.jsx/.css → seção onde o usuário navega pelas gerações
+                                  (Timeline + PhoneInfo), com reveal GSAP
+      SpecsSection.jsx/.css     → ficha técnica completa do aparelho ativo
 
     timeline/
       Timeline.jsx/.css → trilha clicável com um marcador por geração;
                           lê/escreve o índice ativo no store
 
     phone/
-      IphoneViewer.jsx/.css → Canvas do React Three Fiber com OrbitControls,
-              Suspense, iluminação e pixel ratio controlado
-      IphoneModel.jsx        → enquadra e renderiza um dos dois GLBs ativos
+      PhoneViewer.jsx/.css → dono do <Canvas> do React Three Fiber; luz,
+                              ambiente e sombra de contato da cena
+      PhoneModel.jsx        → renderiza o modelo 3D do aparelho ativo (.glb
+                              gerado — ver "Estado atual" abaixo)
       PhoneInfo.jsx/.css    → painel com ano, nome e destaques do aparelho ativo
 ```
 
-## Estado atual
+## Estado atual (o que ainda é placeholder)
 
-- **Timeline**: 20 gerações textuais, com seleção, transição Motion e scroll
-  horizontal suave para manter o item ativo visível.
-- **3D**: o primeiro iPhone é carregado no início. O iPhone 18 Pro Max só é
-  solicitado quando 2026 é selecionado ou quando a comparação final entra em
-  cena.
-- **Performance**: o viewer usa `Suspense`, `frameloop="demand"`, pixel ratio
-  máximo de 1.5 e desmontagem quando a timeline sai do viewport. Os GLBs
-  intermediários não são pré-carregados nem renderizados.
-- **Dados**: informações ausentes no dataset aparecem como "Não disponível no
-  projeto", sem valores estimados.
+- **Modelos 3D**: os 54 aparelhos do dataset (todas as gerações e
+  variantes Plus/Pro/Max/mini/SE/Air, de 2007 a 2026) têm cada um o seu
+  `.glb` real, gerado por
+  `scripts/generate-device-models.mjs` a partir de campos já verificados de
+  `devices.js` (tamanho ← tela real, espessura ← espessura real, cor ←
+  primeira cor de lançamento, nº de "lentes" ← contagem real de câmeras).
+  São modelos deliberadamente ESTILIZADOS e ABSTRATOS — um corpo
+  retangular simples, sem tentar copiar a curvatura, o acabamento ou o
+  desenho exato de nenhum iPhone real — não fotorrealistas, não feitos por
+  um artista 3D, não traçados de fotos da Apple. Isso ainda cumpre parte
+  da Fase 0 do roadmap do documento de arquitetura do projeto; o passo
+  seguinte (opcional, futuro) é trocar cada `.glb` por um modelo definitivo
+  (fotogrametria real ou trabalho de um artista 3D) sem precisar mudar
+  nenhum componente React, já que `PhoneModel.jsx` só lê o caminho do
+  arquivo (ver comentário de `modelPath` em `devices.js`).
+- **Navegação**: a troca de geração hoje é por clique na Timeline. O
+  scroll ainda não dirige a câmera 3D nem a troca automática de aparelho
+  — isso entra nas fases seguintes do roadmap (ScrollControls + GSAP
+  ScrollTrigger orquestrando câmera e conteúdo juntos).
+- **Dados**: todos os campos de `devices.js` são especificações técnicas
+  reais, verificadas contra as páginas oficiais de especificações da Apple
+  (ano, tela, processador, câmera, peso, espessura, cores, fatos
+  históricos). Nenhum valor foi inventado. Campos sem confirmação oficial
+  da Apple (abertura da câmera do iPhone original, 3G e 3GS; nome do chip
+  do iPhone original) dizem isso explicitamente no próprio texto, em vez
+  de estimar um número. O iPhone Duo (o lançamento mais recente do
+  catálogo) é o item com menor grau de confirmação cruzada — vale
+  reconferir contra a especificação oficial mais atual antes de tratar
+  qualquer detalhe dele como definitivo.
