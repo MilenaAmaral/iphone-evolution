@@ -20,10 +20,17 @@ function walk(dir) {
 }
 
 const modelFiles = walk(rootDir)
-const modelNames = new Set(modelFiles.map((file) => path.basename(file, '.glb')))
+const modelNames = new Set(modelFiles.map((file) => path.basename(file)))
 
-const activeModels = ['iphone_1st_generation', 'iphone-duo', 'iphone-18-pro-max']
-const missing = activeModels.filter((id) => !modelNames.has(id))
+const activeModels = [
+  'iphone_1st_generation.glb',
+  'iphone_18_pro_max.glb',
+  'apple_watch_2015.glb',
+  'app_watch_2026.glb',
+  'ipad_2010.glb',
+  'ipad_2026.glb',
+]
+const missing = activeModels.filter((filename) => !modelNames.has(filename))
 
 if (missing.length === 0) {
   console.log(`✓ Os ${activeModels.length} modelos 3D ativos foram encontrados.`)
@@ -31,7 +38,7 @@ if (missing.length === 0) {
 }
 
 console.warn('⚠️ Modelos ausentes:')
-for (const id of missing) {
-  console.warn(`- ${id}.glb`)
+for (const filename of missing) {
+  console.warn(`- ${filename}`)
 }
 process.exit(1)

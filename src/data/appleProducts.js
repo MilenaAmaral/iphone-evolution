@@ -9,7 +9,7 @@ const iphoneFirst = {
 const iphoneLatest = {
   name: 'iPhone 18 Pro Max',
   year: 2026,
-  modelPath: '/models/iphone-18-pro-max.glb',
+  modelPath: '/models/iphone_18_pro_max.glb',
   category: 'iPhone',
   type: '3d',
 }
@@ -27,6 +27,22 @@ const appleWatchLatest = {
   year: 2026,
   modelPath: '/models/app_watch_2026.glb',
   category: 'Apple Watch',
+  type: '3d',
+}
+
+const ipadFirst = {
+  name: 'iPad',
+  year: 2010,
+  modelPath: '/models/ipad_2010.glb',
+  category: 'iPad',
+  type: '3d',
+}
+
+const ipadLatest = {
+  name: 'iPad mais recente',
+  year: 2026,
+  modelPath: '/models/ipad_2026.glb',
+  category: 'iPad',
   type: '3d',
 }
 
@@ -48,8 +64,8 @@ export const appleProducts = [
   },
   {
     category: 'iPad',
-    first: unavailableProduct('iPad', 'iPad', 2010),
-    latest: unavailableProduct('iPad', 'iPad mais recente', 2026),
+    first: ipadFirst,
+    latest: ipadLatest,
   },
   {
     category: 'MacBook',
