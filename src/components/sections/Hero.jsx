@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { prefersReducedMotion } from '../../utils/motionPreference'
+import AppleLogoHero from '../phone/AppleLogoHero'
 import './Hero.css'
 
 // Hero: abertura da experiência. Fica fora do Canvas 3D (o PhoneViewer
@@ -47,6 +48,7 @@ function Hero() {
 
   return (
     <section className="hero" id="topo">
+      <AppleLogoHero />
       <h1 className="hero__title" aria-label="Uma evolução em 3D.">
         {titleWords.map((word, index) => (
           <span className="hero__word-clip" key={word}>

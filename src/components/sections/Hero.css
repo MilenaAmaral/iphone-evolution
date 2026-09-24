@@ -1,4 +1,6 @@
 .hero {
+  position: relative;
+  isolation: isolate;
   min-height: 100svh;
   display: flex;
   flex-direction: column;
@@ -8,7 +10,25 @@
   padding: 0 20px;
 }
 
+.hero__apple-logo {
+  position: absolute;
+  inset: 7% 8% 12%;
+  z-index: -1;
+  opacity: 0.3;
+  pointer-events: none;
+  filter: saturate(0.72) brightness(0.82);
+  mask-image: radial-gradient(ellipse at center, #000 24%, transparent 76%);
+}
+
+.hero__apple-logo canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
 .hero__title {
+  position: relative;
+  z-index: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -34,6 +54,8 @@
 }
 
 .hero__subtitle {
+  position: relative;
+  z-index: 1;
   max-width: 34rem;
   font-size: clamp(1rem, 2vw, 1.2rem);
   color: var(--color-text-muted);
@@ -50,10 +72,20 @@
   color: var(--color-text-muted);
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .hero__apple-logo {
+    opacity: 0.22;
+  }
+}
+
 @media (max-width: 640px) {
   .hero {
     min-height: 88svh;
     padding: 0 24px;
+  }
+
+  .hero__apple-logo {
+    inset: 12% -18% 18%;
   }
 
   .hero__title {
