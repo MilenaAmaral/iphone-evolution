@@ -18,6 +18,30 @@
   touch-action: pan-y;
 }
 
+.featured-iphone__model .phone-viewer,
+.latest-launch__model .phone-viewer {
+  background: radial-gradient(
+    ellipse 38% 48% at 50% 48%,
+    rgba(255, 255, 255, 0.78) 0%,
+    rgba(225, 225, 225, 0.42) 20%,
+    rgba(150, 150, 150, 0.14) 48%,
+    rgba(255, 255, 255, 0) 78%
+  );
+}
+
+@media (max-width: 640px) {
+  .featured-iphone__model .phone-viewer,
+  .latest-launch__model .phone-viewer {
+    background: radial-gradient(
+      ellipse 38% 44% at 50% 48%,
+      rgba(255, 255, 255, 0.62) 0%,
+      rgba(225, 225, 225, 0.32) 20%,
+      rgba(150, 150, 150, 0.1) 48%,
+      rgba(255, 255, 255, 0) 78%
+    );
+  }
+}
+
 .phone-viewer canvas {
   display: block;
   width: 100% !important;
