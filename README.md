@@ -6,6 +6,10 @@ Projeto original, não afiliado, endossado ou patrocinado pela Apple Inc. Os dad
 
 **Tecnologias:** React + Vite (JavaScript) · Three.js · React Three Fiber · @react-three/drei · GSAP · Zustand
 
+## Projeto online
+
+🔗 **[Acessar o iPhone Evolution](https://iphone-evolution-five.vercel.app/)**
+
 ## Sobre o projeto
 
 O projeto começou com uma proposta mais ampla, com diversos produtos e experiências 3D. Durante o desenvolvimento, o escopo foi simplificado para concentrar a experiência na evolução do iPhone e no capítulo do iPhone Duo.
