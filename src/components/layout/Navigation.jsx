@@ -5,8 +5,7 @@ import './Navigation.css'
 const LINKS = [
   { href: '#topo', label: 'Início' },
   { href: '#evolucao', label: 'Evolução' },
-  { href: '#produtos-apple', label: 'Produtos Apple' },
-  { href: '#comparar', label: 'Comparar' },
+  { href: '#ultimo-lancamento', label: 'Último lançamento' },
 ]
 
 function Navigation() {

@@ -3,27 +3,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
 import Hero from './components/sections/Hero'
-import EvolutionOverview from './components/sections/EvolutionOverview'
 import FeaturedIphoneSection from './components/sections/FeaturedIphoneSection'
-import AppleProductsSection from './components/sections/AppleProductsSection'
+import LatestLaunchSection from './components/sections/LatestLaunchSection'
 import { iphoneProduct } from './data/appleProducts'
-import CompareSection from './components/sections/CompareSection'
 import './App.css'
 
-/**
- * A experiência principal tem três movimentos: abertura, timeline com
- * um único viewer 3D sob demanda e comparação final entre os extremos.
- * As gerações intermediárias alteram dados e narrativa, não carregam GLBs.
- */
 function App() {
-  // Recalcula todos os ScrollTriggers uma vez, depois que o layout inicial
-  // termina de se estabilizar (fontes prontas + um frame de folga pro
-  // React/CSS aplicarem tudo). Sem isso, posições de início/fim de
-  // trigger calculadas cedo demais podem ficar erradas caso algo mude o
-  // layout depois (hoje o risco é pequeno, já que a tipografia usa fontes
-  // do sistema sem carregamento assíncrono — mas vira relevante assim que
-  // os modelos 3D reais entrarem, cujo carregamento não afeta o fluxo do
-  // documento mas pode disparar um reflow em navegadores mais lentos).
   useEffect(() => {
     let cancelled = false
 
@@ -44,24 +29,14 @@ function App() {
       <Navigation />
       <main className="app__content">
         <Hero />
-        <EvolutionOverview />
         <FeaturedIphoneSection
-          id="primeiro-iphone"
+          id="evolucao"
           eyebrow="O começo / 2007"
           title="O primeiro gesto."
           description="O iPhone original condensou telefone, música e internet em uma superfície que redefiniu a relação com a tecnologia."
           product={iphoneProduct.first}
         />
-        <FeaturedIphoneSection
-          id="ultimo-iphone"
-          eyebrow="O presente / 2026"
-          title="O sistema amadureceu."
-          description="O iPhone mais recente transforma câmera, desempenho e materiais em uma experiência cada vez mais integrada."
-          product={iphoneProduct.latest}
-          side="right"
-        />
-        <AppleProductsSection />
-        <CompareSection />
+        <LatestLaunchSection />
       </main>
       <Footer />
     </div>

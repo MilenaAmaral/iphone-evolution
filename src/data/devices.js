@@ -55,18 +55,17 @@
  *   correto uns aos outros (a própria geometria é escalada pelo tamanho
  *   real da tela). Só volta a ser necessário se um modelo definitivo
  *   (feito fora desse script) vier numa unidade de modelagem diferente.
- * - Câmeras do iPhone (original), 3G e 3GS: a Apple nunca divulgou
- *   oficialmente o nome do chip (no caso do original) nem a abertura (ƒ)
- *   das lentes desses três — por isso os campos correspondentes dizem
- *   isso de forma explícita, em vez de inventar um número.
+ * - iPhone (1ª geração): processador Samsung ARM 11 a 412 MHz (dado
+ *   histórico amplamente documentado; a Apple não divulgava o nome do
+ *   chip nas especificações). Câmeras do original, 3G e 3GS: a Apple
+ *   nunca divulgou a abertura (ƒ) das lentes, por isso ela não aparece.
  * - iPhone Duo: é o modelo mais novo e menos convencional do catálogo (o
  *   primeiro iPhone dobrável da Apple, anunciado em 2026). Os campos
  *   `display`/`thickness` descrevem os dois estados (fechado/aberto) numa
  *   única string, já que `deviceStats.js` só lê o PRIMEIRO número de cada
  *   campo (a medida "fechado", que é a relevante pra comparação com os
- *   demais aparelhos). Como é o lançamento mais recente do dataset,
- *   qualquer detalhe aqui vale a pena reconferir contra a especificação
- *   oficial mais atual antes de tratar como definitivo.
+ *   demais aparelhos). Dados conferidos em 29/09/2026 contra
+ *   apple.com/iphone-duo/specs e apple.com/iphone-18-pro/specs.
  */
 
 // Convenção de caminho pros .glb reais — ver nota sobre `modelPath` no
@@ -79,20 +78,25 @@ export const devices = [
   {
     id: 'iphone-original',
     timelineHighlight: true,
-    name: 'iPhone',
+    name: 'iPhone (1ª geração)',
     generation: 1,
     year: 2007,
-    display: '3,5" (widescreen), 480×320 px, 163 ppi',
-    processor: 'Não divulgado oficialmente pela Apple — nunca publicou o nome do chip deste modelo',
-    camera: '2MP traseira — abertura não divulgada oficialmente pela Apple',
+    display: '3,5", 320×480 px, 163 ppi',
+    processor: 'Samsung ARM 11, 412 MHz',
+    camera: '2MP traseira',
     weight: '135 g',
+    storage: '4 GB e 8 GB no lançamento; posteriormente 16 GB',
+    os: 'iPhone OS',
+    connectivity: '2G/EDGE, Wi-Fi e Bluetooth',
+    connector: '30 pinos',
     thickness: '11,6 mm',
     colors: ['Alumínio e preto (modelo único — sem opção de cor)'],
     highlights: [
       'Primeiro iPhone da história, anunciado por Steve Jobs em janeiro de 2007 e lançado em 29 de junho de 2007',
       'Não tinha App Store, 3G, GPS ou copiar/colar — rodava o "iPhone OS 1", antes até do nome "iOS" existir',
     ],
-    modelPath: getModelPath('iphone-original'),
+    // Modelo 3D real do iPhone original presente em public/models.
+    modelPath: '/models/iphone_1st_generation.glb',
     modelScale: 1,
   },
   {
@@ -1068,15 +1072,15 @@ export const devices = [
     name: 'iPhone 18 Pro Max',
     generation: 53,
     year: 2026,
-    display: '6,9" Super Retina XDR OLED (tela cheia), 2868×1320 px, 120 Hz',
+    display: '6,9" OLED (tela cheia), 2868×1320 px, 460 ppi, até 120 Hz',
     processor: 'Apple A20 Pro',
     camera: 'Tripla 48MP — principal com abertura variável (ƒ/1.48–ƒ/4.0) + ultra grande angular ƒ/2.2 + teleobjetiva 4x (100mm) ƒ/2.8',
     weight: '249 g',
     thickness: '8,75 mm',
     colors: ['Preto', 'Prata', 'Glacier', 'Bordô'],
     highlights: [
-      'Compartilha chip A20 Pro e câmera com abertura variável com o iPhone 18 Pro, mas com tela maior (6,9") e maior bateria da geração',
-      'iPhone "tradicional" (não dobrável) mais pesado já lançado pela Apple até 2026, com 249 g',
+      'Compartilha o chip A20 Pro e a câmera principal com abertura variável com o iPhone 18 Pro, com tela maior (6,9")',
+      'Até 45 horas de reprodução de vídeo, segundo a Apple',
     ],
     modelPath: '/models/iphone_18_pro_max.glb',
     modelScale: 1,
@@ -1092,12 +1096,13 @@ export const devices = [
     camera: 'Dupla — 48MP principal (Fusion) ƒ/1.6 com teleobjetiva 2x por recorte de sensor + 48MP ultra grande angular ƒ/2.2',
     weight: '254 g',
     thickness: 'Fechado: 11,3 mm / Aberto: 5,2 mm',
-    colors: ['Céu Noturno', 'Branco Estelar'],
+    colors: ['Night Sky', 'Star White'],
     highlights: [
-      'Primeiro iPhone dobrável da Apple, lançado ao lado do iPhone 18 Pro como topo da linha 2026',
-      'iPhone mais caro já lançado pela Apple, com preço inicial de US$ 1.999',
+      'Primeiro iPhone dobrável da Apple, anunciado em setembro de 2026 ao lado do iPhone 18 Pro e do iPhone 18 Pro Max',
+      'Preço inicial de US$ 1.999 (256 GB), segundo a Apple',
     ],
-    modelPath: getModelPath('iphone-duo'),
+    // Modelo 3D do iPhone Duo presente em public/models.
+    modelPath: '/models/apple_iphone_duo.glb',
     modelScale: 1,
   },
 ]

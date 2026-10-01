@@ -42,7 +42,8 @@
 }
 
 .navigation__links a {
-  color: var(--color-text-muted);
+  /* Mesmo dourado das bordas/detalhes do projeto (--color-accent). */
+  color: var(--color-accent);
   text-decoration: none;
   font-size: 14px;
   transition: color 0.2s ease;
@@ -51,4 +52,28 @@
 .navigation__links a:hover,
 .navigation__links a:focus-visible {
   color: var(--color-text-strong);
+}
+
+.navigation__links a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+/* Em celulares, a navegação rola horizontalmente sem alargar a página. */
+@media (max-width: 640px) {
+  .navigation {
+    padding: 14px 16px;
+  }
+
+  .navigation__links {
+    max-width: 66vw;
+    gap: 14px;
+    padding-right: 20px;
+    mask-image: linear-gradient(90deg, #000 82%, transparent);
+  }
+
+  .navigation__links a {
+    font-size: 13px;
+  }
 }

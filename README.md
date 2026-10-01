@@ -24,15 +24,17 @@ public/
 
 src/
   main.jsx           → ponto de entrada; monta <App /> no #root
-  App.jsx             → layout raiz: abertura, evolução resumida, capítulos
-                       do iPhone e Produtos Apple
+  App.jsx             → layout raiz: Início, Evolução (primeiro iPhone e
+                       iPhone 18 Pro Max), Último lançamento (iPhone Duo)
+                       e Comparar
   App.css / index.css → App.css só resolve o layout raiz; index.css tem o
                        reset global e os tokens de design (cores, fontes)
 
   data/
     devices.js         → especificações históricas do iPhone
     iphoneCatalog.js   → catálogo visual cronológico do iPhone
-    appleProducts.js   → primeiro/último produto por categoria Apple
+    appleProducts.js   → iPhones em 3D (1ª geração, 18 Pro Max, Duo) com
+                         ficha técnica confirmada
 
   store/
     useExperienceStore.js → estado global (Zustand): qual geração está
@@ -48,8 +50,12 @@ src/
     sections/
       Hero.jsx/.css                  → abertura da página, com CTA e animação GSAP
       EvolutionOverview.jsx/.css     → evolução resumida do iPhone
-      FeaturedIphoneSection.jsx/.css → primeiro e último iPhone em 3D
-      AppleProductsSection.jsx/.css  → comparação entre categorias Apple
+      FeaturedIphoneSection.jsx/.css → primeiro iPhone e iPhone 18 Pro Max em 3D
+      LatestLaunchSection.jsx/.css   → Último lançamento: iPhone Duo em 3D
+      CompareSection.jsx/.css        → comparação lado a lado com slider
+
+    shared/
+      SpecList.jsx/.css → ficha técnica (confirmado × não divulgado)
 
     timeline/
       Timeline.jsx/.css → trilha clicável com um marcador por geração;
@@ -63,15 +69,16 @@ src/
 
 ## Estado atual
 
-- **Experiência**: Início, evolução resumida de 2007 à atualidade, primeiro
-  iPhone, último iPhone e Produtos Apple.
+- **Experiência**: Início, Evolução (2007 à atualidade, primeiro iPhone e
+  iPhone 18 Pro Max), Último lançamento (iPhone Duo) e Comparar.
 - **3D**: o componente `Product3D` reutiliza `PhoneScene` e aceita qualquer
   produto com `modelPath`. Os capítulos 3D só montam o Canvas quando entram
   perto da viewport.
 - **Performance**: `Suspense`, `useInView`, cache do GLTFLoader, preload
   controlado e descarte explícito de geometrias, materiais e texturas.
-- **Assets**: apenas modelos com arquivo local disponível são renderizados.
-  Apple Watch, iPad, MacBook e AirPods permanecem em estado pendente até que
-  exista uma fonte e uma licença de redistribuição verificáveis.
+- **Assets**: 4 modelos ativos (logo, iPhone 1ª geração, iPhone 18 Pro Max,
+  iPhone Duo), servidos otimizados. Originais em `models-source/`; para
+  regerar: `npm run optimize:models` (texturas WebP exigem `sharp`
+  instalado localmente: `npm i -D sharp`).
 - **Licenças**: consulte `public/models/MODEL_LICENSES.md` antes de publicar
   ou adicionar novos modelos.

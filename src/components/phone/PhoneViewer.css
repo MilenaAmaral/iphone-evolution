@@ -12,7 +12,10 @@
     radial-gradient(circle at 50% 26%, rgba(216, 178, 107, 0.12), transparent 34%),
     radial-gradient(circle at 50% 35%, #1a1a1d 0%, var(--color-bg) 70%);
   box-shadow: inset 0 1px 0 rgba(242, 241, 238, 0.06), 0 24px 80px rgba(0, 0, 0, 0.22);
-  touch-action: none; /* deixa o gesto de arrastar orbitar a câmera, sem rolar a página */
+  /* pan-y: no celular, arrastar na vertical continua rolando a página
+     (antes o viewer "prendia" o scroll quando o dedo começava sobre ele);
+     arrastar na horizontal gira o modelo pelo OrbitControls. */
+  touch-action: pan-y;
 }
 
 .phone-viewer canvas {

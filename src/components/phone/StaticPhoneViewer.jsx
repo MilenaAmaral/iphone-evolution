@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types'
 import PhoneScene from './PhoneScene'
 
+const DEFAULT_FIT_TARGET_SIZE = 1.15
+
 /**
  * StaticPhoneViewer — como <PhoneViewer>, mas sem <OrbitControls> e sem
  * loop de render contínuo. Construído especificamente pra CompareSection:
@@ -29,7 +31,7 @@ function StaticPhoneViewer({ modelPath, rotation = [0, 0, 0], scale = 1, positio
       rotation={rotation}
       scale={scale}
       position={position}
-      fitModel={fitModel}
+      fitTargetSize={fitModel ? DEFAULT_FIT_TARGET_SIZE : undefined}
       frameloop={interactive || autoRotate ? 'always' : 'demand'}
       camera={{ position: [1.35, 0.7, 3.2], fov: 30 }}
       contactShadowsOpacity={0.4}

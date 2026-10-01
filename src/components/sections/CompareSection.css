@@ -24,6 +24,8 @@
   border: 1px solid var(--color-border);
   background: var(--color-surface);
   user-select: none;
+  /* Celular: arrastar na horizontal move o slider; na vertical, rola a página. */
+  touch-action: pan-y;
 }
 
 .compare-stage__pane {
@@ -74,6 +76,44 @@
 .compare-stage__tag--newer {
   right: 16px;
   color: var(--color-accent);
+}
+
+/* Divisória e alça do slider: posicionadas por cima dos dois painéis.
+   Sem estas regras, os dois elementos entravam no fluxo flex do palco
+   (a faixa cinza à direita) em vez de ficarem sobre a divisão. */
+.compare-stage__divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 1px;
+  background: linear-gradient(180deg, transparent, var(--color-accent) 18%, var(--color-accent) 82%, transparent);
+  transform: translateX(-0.5px);
+  pointer-events: none;
+}
+
+.compare-stage__handle {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--color-accent);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+  backdrop-filter: blur(6px);
+  color: var(--color-accent);
+  font-size: 12px;
+  cursor: ew-resize;
+  transform: translate(-50%, -50%);
+}
+
+.compare-stage__handle:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 /* --- Tabela comparativa ---------------------------------------------- */

@@ -9,6 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "check:models": "node scripts/check-models.mjs",
+    "optimize:models": "node scripts/optimize-models.mjs",
     "generate:iphone-images": "node scripts/generate-iphone-image-assets.mjs"
   },
   "dependencies": {

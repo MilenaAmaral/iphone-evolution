@@ -1,17 +1,27 @@
-import { useRef } from 'react'
+import { Suspense, lazy, useRef } from 'react'
 import { devices } from '../../data/devices'
-import { realIphones } from '../../data/realIphones'
-import StaticPhoneViewer from '../phone/StaticPhoneViewer'
+import { useDragSlider } from '../../hooks/useDragSlider'
 import { useInView } from '../../hooks/useInView'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { getThicknessMm, getWeightGrams, formatSignedNumber } from '../../utils/deviceStats'
 import './CompareSection.css'
 
-// A comparação usa os dois modelos reais disponíveis nas extremidades da
-// coleção. Os dados técnicos continuam vindo de devices.js; realIphones.js
-// fornece os caminhos exatos dos GLBs adicionados em public/models.
-const OLDER = { ...devices[0], ...realIphones[0], storage: '4 GB, 8 GB e 16 GB', connectivity: 'GSM / EDGE' }
-const NEWER = { ...devices[devices.length - 1], ...realIphones[realIphones.length - 1], storage: 'Não disponível no projeto', connectivity: 'Não disponível no projeto' }
+// Mesmo motivo do `lazy()` em OriginSection.jsx — ver o comentário lá.
+// Os dois painéis usam o MESMO import dinâmico (mesmo chunk); o segundo
+// uso reaproveita o módulo já resolvido pelo primeiro, sem duplicar
+// download.
+const StaticPhoneViewer = lazy(() => import('../phone/StaticPhoneViewer'))
+
+// Os dois extremos da linha do tempo — mesma fonte de verdade usada em
+// OriginSection/CurrentSection (devices[0] e o último item do array),
+// nunca um par escolhido à parte. Se um novo aparelho for adicionado ao
+// dataset, esta comparação passa a usar o novo "mais recente" sozinha.
+const OLDER = devices[0]
+// Enquadramento automático (mesmo usado nas seções em destaque): cada .glb
+// vem numa escala de modelagem diferente, e sem isso um aparelho podia
+// aparecer gigante/fora do painel ou minúsculo.
+const COMPARE_FIT_SIZE = 1.15
+const NEWER = devices[devices.length - 1]
 
 // Cada linha mostra o texto ORIGINAL de devices.js como valor (nunca um
 // resumo inventado). `getDelta`, quando existe, é só uma subtração entre
@@ -21,8 +31,6 @@ const COMPARISON_ROWS = [
   { key: 'display', label: 'Tela' },
   { key: 'processor', label: 'Processador' },
   { key: 'camera', label: 'Câmera' },
-  { key: 'storage', label: 'Armazenamento' },
-  { key: 'connectivity', label: 'Conectividade' },
   {
     key: 'weight',
     label: 'Peso',
@@ -43,6 +51,14 @@ const COMPARISON_ROWS = [
   },
   { key: 'colors', label: 'Cores', format: (device) => device.colors.join(', ') },
 ]
+
+function ViewerSkeleton() {
+  return (
+    <div className="phone-viewer__loader" role="status">
+      <span>Carregando modelo 3D</span>
+    </div>
+  )
+}
 
 /**
  * CompareSection — capítulo "Veja a evolução": os dois extremos da linha
@@ -78,6 +94,9 @@ function CompareSection() {
   const viewerInView = useInView(sectionRef)
   useScrollReveal(sectionRef)
 
+  const { value, trackRef, trackHandlers, handleKeyDown } = useDragSlider({ initial: 50, min: 12, max: 88 })
+  const roundedValue = Math.round(value)
+
   return (
     <section className="compare-section section-shell" id="comparar" ref={sectionRef}>
       <header className="compare-section__intro">
@@ -88,51 +107,70 @@ function CompareSection() {
           {OLDER.name} contra {NEWER.name}.
         </h2>
         <p className="section-lede" data-reveal>
-          Os dois extremos desta linha do tempo, lado a lado.
+          Arraste a divisória pra dar mais espaço a um lado ou ao outro — os
+          dois extremos desta linha do tempo, lado a lado.
         </p>
       </header>
 
-      <div className="compare-stage" data-reveal>
-        <div className="compare-stage__pane">
+      <div className="compare-stage" ref={trackRef} {...trackHandlers} data-reveal>
+        <div className="compare-stage__pane" style={{ flexBasis: `${value}%` }}>
           <span className="compare-stage__tag compare-stage__tag--older" aria-hidden="true">
             {OLDER.name} · {OLDER.year}
           </span>
           {viewerInView && (
-            <StaticPhoneViewer
-              modelPath={OLDER.modelPath}
-              scale={OLDER.modelScale}
-              rotation={[0, -0.32, 0]}
-              fitModel
-              interactive
-              autoRotate
-              label={`Modelo 3D do ${OLDER.name} (${OLDER.year})`}
-            />
+            <Suspense fallback={<ViewerSkeleton />}>
+              <StaticPhoneViewer
+                modelPath={OLDER.modelPath}
+                scale={OLDER.modelScale}
+                fitModel
+                fitTargetSize={COMPARE_FIT_SIZE}
+                rotation={[0, -0.32, 0]}
+                label={`Modelo 3D do ${OLDER.name} (${OLDER.year})`}
+              />
+            </Suspense>
           )}
         </div>
 
-        <div className="compare-stage__pane">
+        <div className="compare-stage__pane" style={{ flexBasis: `${100 - value}%` }}>
           <span className="compare-stage__tag compare-stage__tag--newer" aria-hidden="true">
             {NEWER.name} · {NEWER.year}
           </span>
           {viewerInView && (
-            <StaticPhoneViewer
-              modelPath={NEWER.modelPath}
-              scale={NEWER.modelScale}
-              rotation={[0, 0.32, 0]}
-              fitModel
-              interactive
-              autoRotate
-              label={`Modelo 3D do ${NEWER.name} (${NEWER.year})`}
-            />
+            <Suspense fallback={<ViewerSkeleton />}>
+              <StaticPhoneViewer
+                modelPath={NEWER.modelPath}
+                scale={NEWER.modelScale}
+                fitModel
+                fitTargetSize={COMPARE_FIT_SIZE}
+                rotation={[0, 0.32, 0]}
+                label={`Modelo 3D do ${NEWER.name} (${NEWER.year})`}
+              />
+            </Suspense>
           )}
         </div>
 
+        <div className="compare-stage__divider" style={{ left: `${value}%` }} aria-hidden="true" />
+
+        <button
+          type="button"
+          className="compare-stage__handle"
+          style={{ left: `${value}%` }}
+          role="slider"
+          aria-orientation="horizontal"
+          aria-label={`Comparar ${OLDER.name} com ${NEWER.name}`}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={roundedValue}
+          onKeyDown={handleKeyDown}
+        >
+          <span aria-hidden="true">⟨ ⟩</span>
+        </button>
       </div>
 
       <dl
         className="compare-table"
         data-reveal
-        style={{ '--older-emphasis': 0.5, '--newer-emphasis': 0.5 }}
+        style={{ '--older-emphasis': value / 100, '--newer-emphasis': 1 - value / 100 }}
       >
         <div className="compare-table__row compare-table__row--head">
           <span />
@@ -150,8 +188,8 @@ function CompareSection() {
                 {row.label}
                 {delta && <span className="compare-table__delta">{delta}</span>}
               </dt>
-                  <dd className="compare-table__col compare-table__col--older">{format(OLDER) ?? 'Não disponível'}</dd>
-                  <dd className="compare-table__col compare-table__col--newer">{format(NEWER) ?? 'Não disponível'}</dd>
+              <dd className="compare-table__col compare-table__col--older">{format(OLDER)}</dd>
+              <dd className="compare-table__col compare-table__col--newer">{format(NEWER)}</dd>
             </div>
           )
         })}

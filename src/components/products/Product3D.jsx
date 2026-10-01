@@ -19,7 +19,6 @@ function Product3D({ product, interactive = true }) {
         modelPath={product.modelPath}
         fitModel
         interactive={interactive}
-        autoRotate={!interactive}
         label={`${product.name}, ${product.year}`}
       />
     </div>

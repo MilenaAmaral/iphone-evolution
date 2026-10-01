@@ -2,52 +2,90 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+
     <meta name="theme-color" content="#0b0b0d" />
+
     <meta
       name="description"
-      content="iPhone Evolution — experiência visual original pela evolução de design do iPhone, geração a geração."
+      content="iPhone Evolution: experiência visual interativa sobre a evolução do iPhone, com modelos 3D, animações e navegação por scroll."
+    />
+
+    <meta
+      name="robots"
+      content="index, follow"
     />
 
     <!--
-      Open Graph / Twitter Card: controla o preview que aparece ao
-      compartilhar o link (WhatsApp, X, LinkedIn etc.). `og:url` e o
-      `og:image` abaixo usam caminho relativo por enquanto — o projeto
-      ainda não tem um domínio de produção definido. Ao publicar, troque
-      `og:image` por uma URL absoluta (ex.:
-      "https://seu-dominio.com/og-image.png") e adicione um
-      `<link rel="canonical" href="https://seu-dominio.com/" />" logo
-      abaixo — sem um domínio real, um valor fixo aqui ficaria errado.
+      Open Graph / Twitter Card:
+      configurações usadas para definir como o projeto aparece quando
+      o link é compartilhado em redes sociais e aplicativos como
+      WhatsApp, LinkedIn e X.
+
+      Como o projeto ainda não possui um domínio definitivo, as imagens
+      estão usando os caminhos locais. Depois da publicação, posso
+      adicionar as URLs absolutas e o canonical da página.
     -->
+
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="iPhone Evolution" />
-    <meta property="og:title" content="iPhone Evolution — uma evolução em 3D" />
+
+    <meta
+      property="og:title"
+      content="iPhone Evolution | Uma evolução em 3D"
+    />
+
     <meta
       property="og:description"
-      content="Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll."
+      content="Experiência visual interativa sobre a evolução do iPhone, com modelos 3D, animações e navegação por scroll."
     />
+
     <meta property="og:image" content="/og-image.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="iPhone Evolution — uma evolução em 3D" />
+
+    <!-- Twitter / X -->
+
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    />
+
+    <meta
+      name="twitter:title"
+      content="iPhone Evolution | Uma evolução em 3D"
+    />
+
     <meta
       name="twitter:description"
-      content="Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll."
+      content="Experiência visual interativa sobre a evolução do iPhone, com modelos 3D, animações e navegação por scroll."
     />
-    <meta name="twitter:image" content="/og-image.png" />
 
-    <title>iPhone Evolution</title>
+    <meta
+      name="twitter:image"
+      content="/og-image.png"
+    />
+
+    <title>iPhone Evolution | Experiência 3D</title>
+
+    <!--
+      Loader inicial.
+
+      O projeto utiliza React, Three.js e GSAP, então existe um pequeno
+      intervalo enquanto o JavaScript da aplicação é carregado.
+
+      Optei por deixar o loader diretamente no HTML e CSS para que ele
+      apareça mesmo antes do React ser inicializado.
+
+      O loader é removido pelo React depois que a aplicação é carregada.
+      A lógica fica no main.jsx.
+    -->
 
     <style>
-      /*
-        Indicador de carregamento inicial: sem code-splitting por rota
-        (é uma página única), o bundle inteiro (React + Three.js + GSAP)
-        precisa baixar e executar antes do primeiro paint do React — em
-        conexão lenta isso pode levar alguns segundos com a tela em
-        branco. Este spinner é CSS puro, inline (não depende do bundle
-        carregar) e é removido pelo próprio React assim que `#root` é
-        preenchido (ver main.jsx).
-      */
       #initial-loader {
         position: fixed;
         inset: 0;
@@ -80,20 +118,38 @@
       }
     </style>
 
+    <!--
+      Dados estruturados do projeto.
+
+      Estou usando CreativeWork porque este é um projeto independente
+      de portfólio. Também deixo explícito que o projeto não possui
+      afiliação, endosso ou patrocínio da Apple Inc.
+    -->
+
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "CreativeWork",
         "name": "iPhone Evolution",
-        "description": "Experiência visual original pela evolução de design do iPhone, geração a geração, com modelos 3D navegados por scroll. Projeto independente — não afiliado, endossado ou patrocinado pela Apple Inc.",
+        "description": "Experiência visual interativa sobre a evolução do iPhone, com modelos 3D, animações e navegação por scroll. Projeto independente, não afiliado, endossado ou patrocinado pela Apple Inc.",
         "inLanguage": "pt-BR"
       }
     </script>
   </head>
+
   <body>
     <div id="root">
-      <div id="initial-loader" aria-hidden="true"><span id="initial-loader__spinner"></span></div>
+      <div
+        id="initial-loader"
+        aria-hidden="true"
+      >
+        <span id="initial-loader__spinner"></span>
+      </div>
     </div>
-    <script type="module" src="/src/main.jsx"></script>
+
+    <script
+      type="module"
+      src="/src/main.jsx"
+    ></script>
   </body>
 </html>
