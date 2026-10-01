@@ -4,7 +4,7 @@ Experiência web interativa de portfólio mostrando a evolução do iPhone, com 
 
 Projeto original, não afiliado, endossado ou patrocinado pela Apple Inc. Os dados técnicos exibidos são baseados em informações públicas. Texto, direção de arte, código e composição visual são autorais.
 
-Stack: React + Vite (JavaScript) · Three.js · React Three Fiber · @react-three/drei · GSAP · Zustand.
+**Tecnologias:** React + Vite (JavaScript) · Three.js · React Three Fiber · @react-three/drei · GSAP · Zustand
 
 ## Sobre o projeto
 
@@ -12,115 +12,139 @@ O projeto começou com uma proposta mais ampla, com diversos produtos e experiê
 
 Essa decisão tornou a aplicação mais prática, limpa e performática, mantendo o 3D como parte importante da experiência sem depender excessivamente desse recurso.
 
+## Experiência
+
+* **Início:** apresentação do projeto e acesso às principais seções.
+* **Evolução:** timeline visual mostrando a evolução do iPhone de 2007 até a atualidade.
+* **Último lançamento:** capítulo dedicado ao iPhone Duo, com experiência 3D.
+* **Comparar:** comparação entre modelos selecionados.
+
 ## Rodando localmente
+
+Clone o repositório e instale as dependências:
 
 ```bash
 npm install
+```
+
+Execute o projeto:
+
+```bash
 npm run dev
 ```
+
+A aplicação será disponibilizada pelo Vite no endereço local informado no terminal.
 
 ## Estrutura do projeto
 
 ```text
 public/
 └── models/
-    └── modelos GLB existentes e registro de licenças
+    ├── modelos 3D otimizados
+    └── MODEL_LICENSES.md
 
 src/
-├── main.jsx
+├── components/
+│   ├── layout/
+│   ├── sections/
+│   ├── shared/
+│   ├── timeline/
+│   └── phone/
+├── data/
+├── store/
 ├── App.jsx
 ├── App.css
 ├── index.css
-│
-├── data/
-│   ├── devices.js
-│   ├── iphoneCatalog.js
-│   └── appleProducts.js
-│
-├── store/
-│   └── useExperienceStore.js
-│
-└── components/
-    ├── layout/
-    │   ├── Navigation.jsx/.css
-    │   └── Footer.jsx/.css
-    │
-    ├── sections/
-    │   ├── Hero.jsx/.css
-    │   ├── EvolutionOverview.jsx/.css
-    │   ├── FeaturedIphoneSection.jsx/.css
-    │   ├── LatestLaunchSection.jsx/.css
-    │   └── CompareSection.jsx/.css
-    │
-    ├── shared/
-    │   └── SpecList.jsx/.css
-    │
-    ├── timeline/
-    │   └── Timeline.jsx/.css
-    │
-    └── phone/
-        ├── PhoneViewer.jsx/.css
-        ├── Product3D.jsx/.css
-        └── PhoneModel.jsx
+└── main.jsx
+
+models-source/
+└── arquivos originais dos modelos 3D
+
+scripts/
+└── scripts relacionados à otimização dos modelos
 ```
 
-## Estado atual
+## Performance
 
-* **Experiência:** Início, Evolução da história do iPhone, Último lançamento com iPhone Duo e Comparar.
+Como o projeto utiliza modelos 3D, alguns cuidados foram adotados para evitar carregamentos desnecessários:
 
-* **Evolução:** timeline visual mostrando a evolução do iPhone de 2007 até a atualidade.
+* carregamento dos modelos 3D conforme a necessidade da experiência;
+* uso de `Suspense` para controlar o carregamento dos componentes 3D;
+* carregamento baseado na proximidade da seção com a área visível;
+* cache do `GLTFLoader` para evitar carregamentos repetidos;
+* preload controlado dos modelos;
+* descarte de geometrias, materiais e texturas quando necessário;
+* divisão dos principais pacotes em chunks no build do Vite;
+* modelos 3D otimizados para reduzir o tamanho dos arquivos.
 
-* **3D:** modelos 3D utilizados de forma pontual nos principais momentos da experiência, evitando carregar elementos 3D sem necessidade.
+A ideia foi manter o visual 3D sem deixar que ele prejudicasse o carregamento e a navegação da aplicação.
 
-* **Performance:** `Suspense`, `useInView`, cache do GLTFLoader, preload controlado e descarte explícito de geometrias, materiais e texturas.
+## Modelos 3D
 
-* **Assets:** modelos 3D otimizados e organizados em `public/models/`. Os arquivos originais ficam em `models-source/`.
+Os modelos utilizados no projeto foram organizados separando os arquivos originais dos arquivos preparados para uso na aplicação.
 
-Para regerar os modelos otimizados:
+Os arquivos originais ficam em:
+
+```text
+models-source/
+```
+
+Os modelos utilizados pela aplicação ficam em:
+
+```text
+public/models/
+```
+
+Para otimizar os modelos disponíveis, o projeto possui um script específico:
 
 ```bash
 npm run optimize:models
 ```
 
-A otimização de texturas WebP exige o `sharp` instalado localmente:
-
-```bash
-npm i -D sharp
-```
-
-* **Licenças:** consulte `public/models/MODEL_LICENSES.md` antes de publicar o projeto ou adicionar novos modelos.
-
-## Performance
-
-O projeto foi desenvolvido considerando o impacto dos modelos 3D no carregamento da página.
-
-Os recursos 3D são carregados conforme a necessidade da experiência, evitando que todos os modelos sejam inicializados logo no primeiro carregamento.
-
-Também foi utilizada divisão de chunks para separar dependências maiores, como React, Zustand, Three.js e GSAP.
-
-## Tecnologias utilizadas
-
-* React
-* Vite
-* JavaScript
-* Three.js
-* React Three Fiber
-* @react-three/drei
-* GSAP
-* Zustand
-
-## Licença e uso dos modelos
-
-Antes de publicar ou adicionar novos modelos 3D, consulte:
+As informações de licença e atribuição dos modelos utilizados estão disponíveis em:
 
 ```text
 public/models/MODEL_LICENSES.md
 ```
 
-Os modelos utilizados no projeto podem possuir licenças e condições de uso específicas.
+## Tecnologias utilizadas
+
+### React
+
+Utilizado para construir a interface e organizar a aplicação em componentes reutilizáveis.
+
+### Vite
+
+Utilizado como ferramenta de desenvolvimento e build do projeto.
+
+### Three.js
+
+Utilizado para trabalhar com os modelos e elementos 3D.
+
+### React Three Fiber
+
+Utilizado para integrar o Three.js à estrutura de componentes do React.
+
+### @react-three/drei
+
+Utilizado para recursos e componentes auxiliares da experiência 3D.
+
+### GSAP
+
+Utilizado para animações e transições da interface.
+
+### Zustand
+
+Utilizado para controlar estados compartilhados da experiência.
+
+## Objetivo do projeto
+
+O projeto foi desenvolvido como parte do meu portfólio para praticar e demonstrar conhecimentos em desenvolvimento Front-end, principalmente com React, JavaScript, animações e experiências 3D para a web.
+
+Durante o desenvolvimento, também foi um exercício de organização de código, otimização de assets e definição de escopo para uma aplicação mais leve e funcional.
 
 ## Aviso
 
-Apple, iPhone e demais marcas relacionadas são propriedades de seus respectivos detentores.
+Este é um projeto independente desenvolvido para fins educacionais e de portfólio.
 
-Este projeto é independente e não possui afiliação, endosso ou patrocínio da Apple Inc.
+iPhone e demais marcas relacionadas são propriedades de seus respectivos titulares. Este projeto não possui vínculo, afiliação, patrocínio ou endosso da Apple Inc.
