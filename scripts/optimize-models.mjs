@@ -1,7 +1,7 @@
 /**
  * optimize-models.mjs
  *
- * Otimiza os 4 modelos 3D ativos do site SEM trocar os arquivos por
+ * Otimiza os modelos 3D do site SEM trocar os arquivos por
  * imagens e sem mudar os caminhos usados pelos componentes.
  *
  * Entrada:  models-source/<nome>.glb  (originais, preservados fora de public/)
@@ -119,6 +119,13 @@ function stats(document) {
 async function optimize(fileName, config, io, sharp) {
   const sourcePath = path.join(SOURCE_DIR, fileName)
   const outputPath = path.join(OUTPUT_DIR, fileName)
+  // Modelo sem original em models-source/ (ex.: iphone_18_pro_max.glb, que
+  // não é usado pela página atual): pula com aviso em vez de derrubar o
+  // script inteiro com ENOENT.
+  if (!fs.existsSync(sourcePath)) {
+    console.warn(`⚠️ ${fileName}: original não encontrado em models-source/, ignorado.`)
+    return
+  }
   const document = await io.read(sourcePath)
   const before = stats(document)
 
